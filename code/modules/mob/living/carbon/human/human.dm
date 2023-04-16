@@ -14,6 +14,7 @@
 	var/random_tail_holder = "" // overrides species.tail
 	var/heart_beat = 0
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
+	var/list/next_anim_emote_produce
 
 	var/metadata
 	var/gnomed = 0 // timer used by gnomecurse.dm
@@ -2514,3 +2515,19 @@
 		return 0
 
 	return BP.pumped
+
+/mob/living/carbon/human/verb/emote_panel()
+	set category = "IC"
+	set name = "Emote Panel"
+	set desc = "Open emote panel"
+
+	var/list/emotes = list()
+	for(var/emo_key in current_emotes)
+		var/datum/emote/E = current_emotes[emo_key]
+		if(E.key == "list")
+			continue
+		emotes[E.key] = image('icons/mob/emotes.dmi', icon_state = E.key)
+
+	var/emote = show_radial_menu(usr, usr, emotes, radius = 48, tooltips = TRUE)
+	if(emote)
+		emote(emote)

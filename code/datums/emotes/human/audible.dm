@@ -18,6 +18,8 @@
 		EMOTE_STATE(is_stat, CONSCIOUS)
 	)
 
+	animated = TRUE
+
 /datum/emote/human/laugh/get_sound(mob/living/carbon/human/user, intentional)
 	var/static/list/laugh_by_gender_species = list(
 		"[SKRELL][FEMALE]" = SOUNDIN_LAUGH_SKRELL_FEMALE,
@@ -54,6 +56,7 @@
 		EMOTE_STATE(is_stat, CONSCIOUS),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/grunt
 	key = "grunt"
@@ -69,12 +72,12 @@
 
 	message_type = SHOWMSG_AUDIO
 
-	cloud = "cloud-pain"
-
 	state_checks = list(
 		EMOTE_STATE(is_stat, CONSCIOUS),
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_PAIN),
 	)
+
+	animated = TRUE
 
 /datum/emote/human/grunt/get_sound(mob/living/carbon/human/user, intentional)
 	return pick(user.gender == FEMALE ? SOUNDIN_FEMALE_LIGHT_PAIN : SOUNDIN_MALE_LIGHT_PAIN)
@@ -98,12 +101,12 @@
 
 	message_type = SHOWMSG_AUDIO
 
-	cloud = "cloud-pain"
-
 	state_checks = list(
 		EMOTE_STATE(is_stat, CONSCIOUS),
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_PAIN),
 	)
+
+	animated = TRUE
 
 /datum/emote/human/groan/get_sound(mob/living/carbon/human/user, intentional)
 	if(user.get_species() != SKRELL && HAS_TRAIT(src, TRAIT_LOW_PAIN_THRESHOLD) && prob(66))
@@ -130,12 +133,12 @@
 
 	message_type = SHOWMSG_AUDIO
 
-	cloud = "cloud-scream"
-
 	state_checks = list(
 		EMOTE_STATE(is_stat, CONSCIOUS),
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_PAIN),
 	)
+
+	animated = TRUE
 
 /datum/emote/human/scream/get_sound(mob/living/carbon/human/user, intentional)
 	return pick(user.gender == FEMALE ? SOUNDIN_FEMALE_HEAVY_PAIN : SOUNDIN_MALE_HEAVY_PAIN)
@@ -164,6 +167,8 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_BREATHE),
 	)
 
+	animated = TRUE
+
 /datum/emote/human/cough/get_sound(mob/living/carbon/human/user, intentional)
 	return pick(user.gender == FEMALE ? SOUNDIN_FBCOUGH : SOUNDIN_MBCOUGH)
 
@@ -189,6 +194,7 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_BREATHE),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/choke
 	key = "choke"
@@ -210,8 +216,7 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_BREATHE),
 	)
 
-	cloud = "cloud-gasp"
-
+	animated = TRUE
 
 /datum/emote/human/snore
 	key = "snore"
@@ -232,6 +237,7 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_BREATHE),
 	)
 
+	animated = TRUE
 
 // TO-DO: make so intentional sniffing reveals how a reagent solution held in hand smells?
 /datum/emote/human/sniff
@@ -252,6 +258,7 @@
 		EMOTE_STATE(is_stat, CONSCIOUS),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/sneeze
 	key = "sneeze"
@@ -272,6 +279,7 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/gasp
 	key = "gasp"
@@ -293,8 +301,7 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_BREATHE),
 	)
 
-	cloud = "cloud-gasp"
-
+	animated = TRUE
 
 /datum/emote/human/sigh
 	key = "sigh"
@@ -315,6 +322,7 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_EMOTION),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/mumble
 	key = "mumble"
@@ -335,6 +343,7 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_EMOTION),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/hmm_think
 	key = "hmm"
@@ -355,6 +364,8 @@
 	state_checks = list(
 		EMOTE_STATE(is_stat, CONSCIOUS)
 	)
+
+	animated = TRUE
 
 /datum/emote/human/hmm_think/get_sound(mob/living/carbon/human/user, intentional)
 	return pick(user.gender == FEMALE ? SOUNDIN_HMM_THINK_FEMALE : SOUNDIN_HMM_THINK_MALE)
@@ -380,6 +391,8 @@
 		EMOTE_STATE(is_stat, CONSCIOUS)
 	)
 
+	animated = TRUE
+
 /datum/emote/human/hmm_question/get_sound(mob/living/carbon/human/user, intentional)
 	return pick(user.gender == FEMALE ? SOUNDIN_HMM_QUESTION_FEMALE : SOUNDIN_HMM_QUESTION_MALE)
 
@@ -404,6 +417,8 @@
 		EMOTE_STATE(is_stat, CONSCIOUS)
 	)
 
+	animated = TRUE
+
 /datum/emote/human/hmm_excited/get_sound(mob/living/carbon/human/user, intentional)
 	return pick(user.gender == FEMALE ? SOUNDIN_HMM_EXCLAIM_FEMALE : SOUNDIN_HMM_EXCLAIM_MALE)
 
@@ -427,6 +442,8 @@
 	state_checks = list(
 		EMOTE_STATE(is_stat, CONSCIOUS)
 	)
+
+	animated = TRUE
 
 /datum/emote/human/woo/get_sound(mob/living/carbon/human/user, intentional)
 	return pick(user.gender == FEMALE ? SOUNDIN_WOO_FEMALE : SOUNDIN_WOO_MALE)

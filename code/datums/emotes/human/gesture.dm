@@ -11,6 +11,7 @@
 		EMOTE_STATE(is_one_hand_usable),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/rock
 	key = "rock"
@@ -81,6 +82,7 @@
 		EMOTE_STATE(is_one_hand_usable),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/wave
 	key = "wave"
@@ -96,6 +98,7 @@
 		EMOTE_STATE(is_not_species, ZOMBIE),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/salute
 	key = "salute"
@@ -110,3 +113,5 @@
 		EMOTE_STATE(is_one_hand_usable),
 		EMOTE_STATE(is_not_species, ZOMBIE),
 	)
+
+	animated = TRUE

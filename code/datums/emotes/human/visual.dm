@@ -11,6 +11,7 @@
 		EMOTE_STATE(is_not_species, ZOMBIE),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/yawn
 	key = "yawn"
@@ -27,6 +28,7 @@
 		EMOTE_STATE(is_intentional_or_species_no_flag, NO_BREATHE),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/blink
 	key = "blink"
@@ -41,6 +43,7 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/wink
 	key = "wink"
@@ -56,6 +59,7 @@
 		EMOTE_STATE(is_not_species, ZOMBIE),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/grin
 	key = "grin"
@@ -70,6 +74,7 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/drool
 	key = "drool"
@@ -84,6 +89,7 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/smile
 	key = "smile"
@@ -98,6 +104,7 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/frown
 	key = "frown"
@@ -112,6 +119,7 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/eyebrow
 	key = "eyebrow"
@@ -126,6 +134,7 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/shrug
 	key = "shrug"
@@ -140,6 +149,7 @@
 		EMOTE_STATE(is_not_species, ZOMBIE),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/nod
 	key = "nod"
@@ -155,6 +165,7 @@
 		EMOTE_STATE(is_not_species, ZOMBIE),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/shake
 	key = "shake"
@@ -168,6 +179,8 @@
 		EMOTE_STATE(is_present_bodypart, BP_HEAD),
 		EMOTE_STATE(is_not_species, ZOMBIE),
 	)
+
+	animated = TRUE
 
 /datum/emote/human/shake/get_emote_message_3p(mob/living/carbon/human/user)
 	return "<b>[user]</b> shakes [P_THEIR(user)] head."
@@ -185,6 +198,7 @@
 		EMOTE_STATE(is_stat, CONSCIOUS),
 	)
 
+	animated = TRUE
 
 /datum/emote/human/deathgasp
 	key = "deathgasp"
@@ -198,6 +212,8 @@
 	state_checks = list(
 		EMOTE_STATE(is_stat_or_not_intentional, CONSCIOUS),
 	)
+
+	animated = TRUE
 
 /datum/emote/human/deathgasp/get_emote_message_3p(mob/living/carbon/human/user)
 	return "<b>[user]</b> seizes up and falls limp, [P_THEIR(user)] eyes dead and lifeless..."

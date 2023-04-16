@@ -41,11 +41,15 @@ var/global/list/all_emotes
 	var/cooldown = 0.8 SECONDS
 	// Cooldown for the audio of the emote, if it has one.
 	var/audio_cooldown = 3 SECONDS
+	// Cooldown for animations.
+	var/anim_cooldown = 3 SECONDS
 
 	// Visual cue with a cloud above head for some emotes.
 	var/cloud
 
 	var/list/state_checks
+
+	var/animated = FALSE
 
 /datum/emote/proc/get_emote_message_1p(mob/user)
 	return "<i>[message_1p]</i>"
@@ -175,8 +179,31 @@ var/global/list/all_emotes
 	if(cloud)
 		add_cloud(user)
 
+	if(animated && ishuman(user))
+		animation(user, key, intentional)
+
 /datum/emote/proc/add_cloud(mob/user)
 	var/image/emote_bubble = image('icons/mob/emote.dmi', user, cloud, EMOTE_LAYER)
 	emote_bubble.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	flick_overlay(emote_bubble, clients, 30)
 	QDEL_IN(emote_bubble, 3 SECONDS)
+
+/datum/emote/proc/animation(mob/living/carbon/human/user, icon_state, intentional)
+	LAZYINITLIST(user.next_anim_emote_produce)
+	set_cooldown(user.next_anim_emote_produce, anim_cooldown, intentional)
+
+	var/image/I = image('icons/mob/emotes.dmi', icon_state)
+	I.layer = user.layer + 1
+	I.invisibility = user.invisibility
+	I.loc = user
+	I.appearance_flags = APPEARANCE_UI_IGNORE_ALPHA
+	I.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+
+	var/list/viewing = list()
+	for(var/mob/M in viewers(src))
+		if(M.client && (M.client.prefs.toggles & SHOW_ANIMATIONS))
+			viewing |= M.client
+
+	flick_overlay(I, viewing, 10)
+	animate(I, pixel_z = 16, alpha = 125, time = 5) // Raise those hands up!
+	animate(alpha = 0, time = 5)
