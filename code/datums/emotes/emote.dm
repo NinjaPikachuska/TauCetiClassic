@@ -196,14 +196,16 @@ var/global/list/all_emotes
 	I.layer = user.layer + 1
 	I.invisibility = user.invisibility
 	I.loc = user
+	I.alpha = 200
+	I.pixel_y = 6
 	I.appearance_flags = APPEARANCE_UI_IGNORE_ALPHA
 	I.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 	var/list/viewing = list()
-	for(var/mob/M in viewers(src))
+	for(var/mob/M in viewers(user))
 		if(M.client && (M.client.prefs.toggles & SHOW_ANIMATIONS))
 			viewing |= M.client
 
 	flick_overlay(I, viewing, 10)
-	animate(I, pixel_z = 16, alpha = 125, time = 5) // Raise those hands up!
+	animate(I, pixel_z = 8, alpha = 80, time = 5)
 	animate(alpha = 0, time = 5)
