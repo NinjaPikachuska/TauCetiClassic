@@ -43,7 +43,9 @@
 		var/rank = job.title
 		lastJob = job
 		if(!job.map_check())
+			/* <base>
 			. += "<del>[rank]</del></td><td><b> \[DISABLED]</b></td></tr>"
+			</base> */
 			continue
 		if(jobban_isbanned(user, rank))
 			. += "<del>[rank]</del></td><td><b> \[BANNED]</b><br><a href='?_src_=prefs;preference=open_jobban_info;position=[rank]'>Show details</a></td></tr>"

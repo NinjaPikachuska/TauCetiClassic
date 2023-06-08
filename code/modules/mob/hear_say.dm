@@ -164,15 +164,28 @@
 	if(hard_to_hear)
 		message = stars(message)
 
+	/* <base>
 	var/speaker_name = speaker ? speaker.name : ""
+	</base> */
+	// <orbital>
+	var/speaker_name = speaker.radio_voice
+	if(!speaker_name)
+		speaker_name = speaker.name
+
+		if(ishuman(speaker))
+			var/mob/living/carbon/human/H = speaker
+			speaker_name = H.GetVoice()
+	// </orbital>
 
 	if(vname)
 		speaker_name = vname
 
+	/* <base>
 	if(ishuman(speaker))
 		var/mob/living/carbon/human/H = speaker
 		if(H.voice)
 			speaker_name = H.voice
+	</base> */
 
 	if(ishuman(src)) //zombie logic
 		var/mob/living/carbon/human/ME = src

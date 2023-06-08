@@ -1,0 +1,13 @@
+{
+    "map_name": "Prometheus",
+    "map_path": "prom2",
+    "map_file": "prom2.dmm",
+    "station_name": "Prometheus",
+    "system_name" : "Theta Tauri",
+    "station_image": "falcon",
+    "traits": [{"Mining": true, "Linkage": "Cross"}],
+    "space_ruin_levels": 2,
+    "space_empty_levels": 0,
+    "load_junkyard": 0,
+    "minetype": null
+}
