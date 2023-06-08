@@ -28,4 +28,4 @@
 
 	ADD_TRAIT(antag.current, TRAIT_HIDDEN_STASH, ROLE_TRAIT)
 
-	to_chat(antag, "<span class='notice'>Точно! В какой-то из мусорок я оставлял свое снаряжение. Только в какой?..</span>")
+	to_chat(antag, "<span class='warning'>Точно! В какой-то из мусорок я оставлял свое снаряжение. Только в какой?..</span>")

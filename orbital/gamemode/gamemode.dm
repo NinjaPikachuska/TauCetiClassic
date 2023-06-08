@@ -10,24 +10,25 @@
 	addtimer(CALLBACK(src, .proc/awake_traitor), time_to_awake)
 	return TRUE
 
+/datum/game_mode/orbital/proc/create_traitor(mob/traitor)
+	if(!traitor)
+		awake_traitor()
+		return
+
+	to_chat(traitor, "<span class='warning'>Оу...</span>")
+
+	var/datum/faction/orbital_traitor/O = create_uniq_faction(/datum/faction/orbital_traitor)
+	add_faction_member(O, traitor, FALSE, TRUE)
+
 /datum/game_mode/orbital/proc/awake_traitor()
 	var/list/possible_traitor = list()
 	for(var/mob/living/carbon/human/player in living_list)
 		if(player.client && player.mind && player.stat != DEAD)
+			to_chat(player, "<span class='notice'>Ах да, кажется я начинаю вспоминать...</span>")
 			possible_traitor += player
-/*
-	for(var/job in list("Marshal", "Captain"))
-		if(player.mind.assigned_role == job)
-			possible_traitor -= player
-*/
 
 	var/mob/traitor = pick(possible_traitor)
-
-	sleep(15)
-
-	var/datum/faction/orbital_traitor/O = create_uniq_faction(/datum/faction/orbital_traitor)
-
-	add_faction_member(O, traitor, FALSE, TRUE)
+	addtimer(CALLBACK(src, .proc/create_traitor, traitor), 5 SECONDS)
 
 /datum/faction/orbital_traitor
 	name = "Orbital Traitor"
