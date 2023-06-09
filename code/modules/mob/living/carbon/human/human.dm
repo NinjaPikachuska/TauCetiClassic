@@ -937,6 +937,10 @@
 	return
 
 /mob/living/carbon/human/get_species()
+	// <orbital>
+	if(species.name == MONKEY)
+		return HUMAN
+	// </orbital>
 	return species.name
 
 /mob/living/carbon/human/proc/play_xylophone()

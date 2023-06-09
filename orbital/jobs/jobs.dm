@@ -9,10 +9,32 @@
 	. = ..()
 	if(visualsOnly)
 		return
+	if(!preffix)
+		return
 	var/names = splittext(H.real_name, " ")
 	var/last_name = names[length(names)]
 	H.radio_voice = "[preffix][last_name]"
 
+
+/datum/job/prom/assistant
+	title = "Assistant"
+	flag = ASSISTANT
+	department_flag = CIVILIAN
+	faction = "Station"
+	total_positions = -1
+	spawn_positions = -1
+	supervisors = "absolutely everyone"
+	selection_color = "#dddddd"
+	access = list(access_maint_tunnels)
+	//outfit = /datum/outfit/job/assistant/test_subject
+
+/datum/job/prom/assistant/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+	if(!.)
+		return
+	H.set_species(MONKEY)
+	H.real_name = "Pon-Pon"
+	H.name = H.real_name
 
 /datum/job/prom/captain
 	title = "Captain"
@@ -28,7 +50,7 @@
 	req_admin_notify = 1
 	is_head = TRUE
 	access = list() 			//See get_access()
-	outfit = /datum/outfit/job/prom_captain
+	//outfit = /datum/outfit/job/prom_captain
 	skillsets = list("Captain" = /datum/skillset/prom_captain)
 
 /datum/job/prom/captain/get_access()
@@ -46,7 +68,7 @@
 	selection_color = "#d7b088"
 	idtype = /obj/item/weapon/card/id/cargoGold
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station, access_recycler)
-	outfit = /datum/outfit/job/prom_logistics_officer
+	//outfit = /datum/outfit/job/prom_logistics_officer
 	skillsets = list("Logistics Officer" = /datum/skillset/prom_logistics_officer)
 
 /datum/job/prom/pilot
@@ -61,11 +83,11 @@
 	selection_color = "#d7b088"
 	idtype = /obj/item/weapon/card/id/cargo
 	access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
-	outfit = /datum/outfit/job/prom_pilot
+	//outfit = /datum/outfit/job/prom_pilot
 	skillsets = list("Pilot" = /datum/skillset/prom_pilot)
 
 /datum/job/prom/chief_engineer
-	title = "Chief Engineer!"
+	title = "Chief Engineer"
 	preffix = "Chief Engineer "
 	flag = CHIEF
 	department_flag = ENGSEC
@@ -83,7 +105,7 @@
 		access_heads, access_construction, access_sec_doors, access_minisat,
 		access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload, access_engineering_lobby
 	)
-	outfit = /datum/outfit/job/prom_chief_engineer
+	//outfit = /datum/outfit/job/prom_chief_engineer
 	skillsets = list("Chief Engineer" = /datum/skillset/prom_chief_engineer)
 
 /datum/job/prom/engineer
@@ -98,7 +120,7 @@
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/eng
 	access = list(access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_engineering_lobby)
-	outfit = /datum/outfit/job/prom_engineer
+	//outfit = /datum/outfit/job/prom_engineer
 	skillsets = list("Engineer" = /datum/skillset/prom_engineer)
 
 /datum/job/prom/medic
@@ -113,7 +135,7 @@
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/med
 	access = list(access_medical, access_morgue, access_surgery, access_maint_tunnels, access_medbay_storage)
-	outfit = /datum/outfit/job/prom_medic
+	//outfit = /datum/outfit/job/prom_medic
 	skillsets = list("Medical Officer" = /datum/skillset/prom_medic)
 
 /datum/job/prom/psitherapist
@@ -128,11 +150,11 @@
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/med
 	access = list(access_medical, access_psychiatrist, access_medbay_storage)
-	outfit = /datum/outfit/job/prom_psitherapist
+	//outfit = /datum/outfit/job/prom_psitherapist
 	skillsets = list("Psy-therapist" = /datum/skillset/prom_psitherapist)
 
 /datum/job/prom/research_director
-	title = "Research Director!"
+	title = "Research Director"
 	preffix = "Research Director "
 	flag = RD
 	department_flag = MEDSCI
@@ -152,7 +174,7 @@
 		access_xenoarch, access_maint_tunnels, access_eva
 	)
 	skillsets = list("Research Director" = /datum/skillset/prom_research_director)
-	outfit = /datum/outfit/job/prom_research_director
+	//outfit = /datum/outfit/job/prom_research_director
 
 /datum/job/prom/specialist
 	title = "Specialist"
@@ -166,7 +188,7 @@
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/sci
 	access = list(access_tox, access_tox_storage, access_research, access_xenoarch)
-	outfit = /datum/outfit/job/prom_specialist
+	//outfit = /datum/outfit/job/prom_specialist
 	skillsets = list("Specialist" = /datum/skillset/prom_specialist)
 
 /datum/job/prom/marshal
@@ -188,5 +210,5 @@
 		access_research, access_mining, access_medical, access_construction, access_mailsorting,
 		access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway, access_detective
 	)
-	outfit = /datum/outfit/job/prom_marshal
+	//outfit = /datum/outfit/job/prom_marshal
 	skillsets = list("Marshal" = /datum/skillset/prom_marshal)

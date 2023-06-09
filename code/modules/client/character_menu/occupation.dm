@@ -27,7 +27,10 @@
 	var/datum/job/lastJob
 	if (!SSjob)		return
 	for(var/datum/job/job in SSjob.occupations)
-
+		// <orbital>
+		if(!job.map_check())
+			continue
+		// </orbital>
 		index += 1
 		if((index >= limit) || (job.title in splitJobs))
 			if((index < limit) && (lastJob != null))
@@ -42,11 +45,11 @@
 		. += "<td width='60%' align='right'>"
 		var/rank = job.title
 		lastJob = job
+		/* <base>
 		if(!job.map_check())
-			/* <base>
 			. += "<del>[rank]</del></td><td><b> \[DISABLED]</b></td></tr>"
-			</base> */
 			continue
+		</base> */
 		if(jobban_isbanned(user, rank))
 			. += "<del>[rank]</del></td><td><b> \[BANNED]</b><br><a href='?_src_=prefs;preference=open_jobban_info;position=[rank]'>Show details</a></td></tr>"
 			continue

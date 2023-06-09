@@ -1,3 +1,6 @@
+/*
+	Note: completely unused. might delete later if we decide the pacing is okay.
+*/
 /datum/outfit/job/prom_logistics_officer
 	name = OUTFIT_JOB_NAME("Logistics Officer")
 

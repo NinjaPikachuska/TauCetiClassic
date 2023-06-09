@@ -35,6 +35,10 @@ SUBSYSTEM_DEF(job)
 			continue
 		if(job.faction != faction)
 			continue
+		// <orbital>
+		if(!job.map_check())
+			continue
+		// </orbital>
 		occupations += job
 		name_occupations[job.title] = job
 		type_occupations[J] = job
