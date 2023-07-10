@@ -227,7 +227,6 @@
 	hitsound = list('sound/effects/woodhit.ogg')
 	throwforce = 10.0
 	throw_speed = 2
-	throw_range = 7
 	w_class = SIZE_SMALL
 	attack_verb = list("bashed", "battered", "bludgeoned", "thrashed", "whacked") //I think the rollingpin attackby will end up ignoring this anyway.
 

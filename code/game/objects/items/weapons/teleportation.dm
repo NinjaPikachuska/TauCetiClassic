@@ -20,7 +20,6 @@
 	w_class = SIZE_TINY
 	item_state = "electronic"
 	throw_speed = 4
-	throw_range = 20
 	m_amt = 400
 	origin_tech = "magnets=1"
 

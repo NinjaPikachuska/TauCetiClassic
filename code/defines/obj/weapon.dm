@@ -33,7 +33,6 @@
 	w_class = SIZE_TINY
 	throwforce = 0
 	throw_speed = 4
-	throw_range = 20
 
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
@@ -275,7 +274,6 @@
 	throwforce = 5
 	w_class = SIZE_TINY
 	throw_speed = 4
-	throw_range = 20
 	m_amt = 100
 	origin_tech = "magnets=1"
 

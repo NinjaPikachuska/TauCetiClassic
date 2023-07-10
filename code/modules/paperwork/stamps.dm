@@ -7,7 +7,6 @@
 	throwforce = 0
 	w_class = SIZE_MINUSCULE
 	throw_speed = 7
-	throw_range = 15
 	m_amt = 60
 	hitsound = list('sound/effects/stamp.ogg') //taken from Baystation build
 	var/dye_color = DYE_CARGO

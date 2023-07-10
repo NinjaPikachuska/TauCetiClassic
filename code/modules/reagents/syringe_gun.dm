@@ -9,7 +9,6 @@
 	item_state = "syringegun"
 	w_class = SIZE_SMALL
 	throw_speed = 2
-	throw_range = 10
 	force = 4.0
 	var/list/syringes = list()
 	var/max_syringes = 1

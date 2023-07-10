@@ -18,7 +18,6 @@
 	w_class = SIZE_TINY
 	throwforce = 0
 	throw_speed = 4
-	throw_range = 20
 
 /obj/item/weapon/bananapeel/atom_init()
 	. = ..()
@@ -33,7 +32,6 @@
 	w_class = SIZE_TINY
 	throwforce = 0
 	throw_speed = 4
-	throw_range = 20
 
 /obj/item/weapon/bananapeel/honk/atom_init()
 	. = ..()
@@ -52,7 +50,6 @@
 	w_class = SIZE_TINY
 	throwforce = 0
 	throw_speed = 4
-	throw_range = 20
 	filling_color = "#ff1c1c"
 	bitesize = 3
 	list_reagents = list("cleaner" = 5)
@@ -190,7 +187,6 @@
 	throwforce = 3
 	w_class = SIZE_MINUSCULE
 	throw_speed = 3
-	throw_range = 15
 	attack_verb = list("HONKED")
 	var/cooldown = FALSE
 

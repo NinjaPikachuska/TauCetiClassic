@@ -13,7 +13,6 @@
 	icon_state = "firstaid"
 	item_state = "firstaid"
 	throw_speed = 2
-	throw_range = 8
 	max_storage_space = DEFAULT_BOX_STORAGE
 	var/empty = 0
 

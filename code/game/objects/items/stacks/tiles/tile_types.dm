@@ -23,7 +23,6 @@
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
-	throw_range = 20
 	flags = CONDUCT
 	max_amount = 60
 	origin_tech = "biotech=1"
@@ -41,7 +40,6 @@
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
-	throw_range = 20
 	flags = CONDUCT
 	max_amount = 60
 	turf_type = /turf/simulated/floor/wood
@@ -58,7 +56,6 @@
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
-	throw_range = 20
 	flags = CONDUCT
 	max_amount = 60
 	turf_type = /turf/simulated/floor/carpet

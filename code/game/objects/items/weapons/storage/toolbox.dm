@@ -8,7 +8,6 @@
 	force = 5.0
 	throwforce = 10.0
 	throw_speed = 1
-	throw_range = 7
 
 	w_class = SIZE_NORMAL
 	max_w_class = SIZE_SMALL

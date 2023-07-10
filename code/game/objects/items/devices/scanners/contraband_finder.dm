@@ -8,7 +8,6 @@
 	throwforce = 3
 	w_class = SIZE_TINY
 	throw_speed = 5
-	throw_range = 10
 	m_amt = 200
 	origin_tech = "magnets=4;biotech=4"
 
@@ -525,7 +524,6 @@
 	throwforce = 5
 	w_class = SIZE_SMALL
 	throw_speed = 5
-	throw_range = 10
 	m_amt = 300
 	origin_tech = "magnets=5;biotech=5;programming=3"
 

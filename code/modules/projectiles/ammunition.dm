@@ -87,7 +87,6 @@
 	throwforce = 2
 	w_class = SIZE_TINY
 	throw_speed = 4
-	throw_range = 10
 	var/list/stored_ammo = list()
 	var/ammo_type = /obj/item/ammo_casing
 	var/max_ammo = 7

@@ -1392,7 +1392,6 @@
 	throwforce = 4
 	w_class = SIZE_TINY
 	throw_speed = 2
-	throw_range = 10
 	var/toxicity = 4
 	var/WeedKillStr = 2
 
@@ -1411,7 +1410,6 @@
 	throwforce = 4
 	w_class = SIZE_TINY
 	throw_speed = 2
-	throw_range = 10
 	var/toxicity = 4
 	var/PestKillStr = 2
 

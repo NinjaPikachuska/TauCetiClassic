@@ -6,7 +6,6 @@
 	force = 3.0
 	throwforce = 10.0
 	throw_speed = 5
-	throw_range = 10
 	w_class = SIZE_SMALL
 	attack_verb = list("mopped", "bashed", "bludgeoned", "whacked")
 

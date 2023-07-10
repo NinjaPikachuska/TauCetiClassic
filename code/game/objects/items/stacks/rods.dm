@@ -8,7 +8,6 @@
 	force = 2.0
 	throwforce = 5.0
 	throw_speed = 5
-	throw_range = 20
 	m_amt = 1875
 	max_amount = 60
 	usesound = 'sound/weapons/Genhit.ogg'

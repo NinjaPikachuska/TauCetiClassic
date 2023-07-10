@@ -18,7 +18,6 @@
 	flags = CONDUCT | HEAR_TALK
 	throwforce = 2
 	throw_speed = 4
-	throw_range = 20
 
 	var/timer_to_destruct
 

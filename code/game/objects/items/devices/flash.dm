@@ -6,7 +6,6 @@
 	throwforce = 5
 	w_class = SIZE_TINY
 	throw_speed = 4
-	throw_range = 10
 	flags = CONDUCT
 	origin_tech = "magnets=2;combat=1"
 

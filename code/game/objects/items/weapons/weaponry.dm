@@ -7,7 +7,6 @@
 	throwforce = 0
 	w_class = SIZE_TINY
 	throw_speed = 7
-	throw_range = 15
 	attack_verb = list("banned")
 
 /obj/item/weapon/banhammer/suicide_act(mob/user)

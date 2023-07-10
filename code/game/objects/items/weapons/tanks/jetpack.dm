@@ -112,5 +112,4 @@
 	icon_state = "jetpack-mini"
 	item_state = "jetpack-mini"
 	volume = 40
-	throw_range = 7
 	w_class = SIZE_SMALL

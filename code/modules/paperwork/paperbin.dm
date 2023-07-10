@@ -6,7 +6,6 @@
 	throwforce = 1
 	w_class = SIZE_SMALL
 	throw_speed = 3
-	throw_range = 7
 	var/amount = 30 // How much paper is in the bin.
 	var/list/papers = list() // List of papers put in the bin for reference.
 

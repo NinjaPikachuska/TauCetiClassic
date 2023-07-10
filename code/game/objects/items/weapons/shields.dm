@@ -376,7 +376,6 @@
 	item_state = "electronic"
 	throwforce = 10.0
 	throw_speed = 2
-	throw_range = 10
 	w_class = SIZE_TINY
 	origin_tech = "magnets=3;syndicate=4"
 

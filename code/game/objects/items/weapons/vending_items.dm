@@ -9,7 +9,6 @@
 	force = 7.0
 	throwforce = 15.0
 	throw_speed = 1
-	throw_range = 7
 	w_class = SIZE_NORMAL
 
 	var/charges = 0		//how many restocking "charges" the refill has

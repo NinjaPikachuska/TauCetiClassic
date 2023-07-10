@@ -6,7 +6,6 @@
 	icon_state = "can_grenade_preview"
 	item_state = "flashbang"
 	throw_speed = 4
-	throw_range = 20
 	flags = CONDUCT
 	slot_flags = SLOT_FLAGS_BELT
 	active = 0

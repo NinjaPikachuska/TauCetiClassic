@@ -9,7 +9,6 @@
 	attack_verb = list("whacked", "fisted", "power-punched")
 	force = 20
 	throwforce = 10
-	throw_range = 7
 	w_class = SIZE_SMALL
 	origin_tech = "combat=5;powerstorage=3;syndicate=3"
 	can_embed = FALSE

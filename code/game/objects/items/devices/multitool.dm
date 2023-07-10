@@ -14,7 +14,6 @@
 	force = 1.0
 	w_class = SIZE_TINY
 	throwforce = 5.0
-	throw_range = 15
 	throw_speed = 3
 	desc = "You can use this on airlocks or APCs to try to hack them without cutting wires."
 	m_amt = 50

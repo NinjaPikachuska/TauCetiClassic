@@ -200,7 +200,6 @@
 	slot_flags = SLOT_FLAGS_BELT
 	force = 6.0
 	throw_speed = 2
-	throw_range = 9
 	w_class = SIZE_TINY
 	m_amt = 80
 	origin_tech = "materials=1;engineering=1"

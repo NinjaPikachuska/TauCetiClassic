@@ -19,7 +19,6 @@
 	throwforce = 0
 	w_class = SIZE_MINUSCULE
 	throw_speed = 7
-	throw_range = 15
 	m_amt = 10
 	var/colour = "black"	// can we make it HEX?
 	var/click_cooldown = 0

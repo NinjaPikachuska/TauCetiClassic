@@ -9,7 +9,6 @@
 	w_class = SIZE_TINY
 	item_state = "electronic"
 	throw_speed = 4
-	throw_range = 20
 	m_amt = 500
 	var/active = FALSE
 	var/atom/target = null

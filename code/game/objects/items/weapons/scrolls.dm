@@ -7,7 +7,6 @@
 	w_class = SIZE_TINY
 	item_state = "paper"
 	throw_speed = 4
-	throw_range = 20
 	origin_tech = "bluespace=4"
 
 	action_button_name = "Use Scroll of Teleportation"

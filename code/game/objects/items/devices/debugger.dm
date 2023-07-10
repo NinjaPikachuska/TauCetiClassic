@@ -13,7 +13,6 @@
 	force = 5.0
 	w_class = SIZE_TINY
 	throwforce = 5.0
-	throw_range = 15
 	throw_speed = 3
 	m_amt = 50
 	g_amt = 20
