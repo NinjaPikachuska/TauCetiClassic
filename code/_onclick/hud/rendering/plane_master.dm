@@ -66,6 +66,10 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 			global.client_plane_masters[ckey] += PM
 			global.client_plane_masters[ckey] += PM.generate_relays()
 
+	var/new_screen_loc = byond_version > 515 ? "1,1" : "CENTER"
+	for(var/atom/movable/screen as anything in global.client_plane_masters[ckey])
+		screen.screen_loc = new_screen_loc
+
 	screen |= global.client_plane_masters[ckey]
 
 /client/proc/update_plane_masters(type, map_view)
