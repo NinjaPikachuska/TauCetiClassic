@@ -794,9 +794,9 @@
 	var/obj/item/device/pda/pda = new(H)
 	pda.assign(H.real_name)
 	pda.ownrank = C.rank
-	pda.owner_account = MA.account_number
-	pda.owner_fingerprints += C.fingerprint_hash
-	MA.owner_PDA = pda
+	var/datum/data/pda/app/nanobank/NB = pda.find_program(/datum/data/pda/app/nanobank)
+	if(NB)
+		NB.link_account(MA)
 	H.equip_or_collect(pda, SLOT_R_STORE)
 
 /datum/spawner/space_trader/dealer
