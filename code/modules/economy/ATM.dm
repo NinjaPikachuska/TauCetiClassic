@@ -500,8 +500,7 @@ log transactions
 
 				var/insurance_price = SSeconomy.insurance_prices[insurance_type]
 
-				var/time_addition = round((SSeconomy.endtime - world.timeofday) / 600) * 10 // An additional $10 for every remaining minute before payday
-				var/insurance_price_with_addition = insurance_price + time_addition
+				var/insurance_price_with_addition = insurance_price + INSURANCE_TIME_ADDITION
 				if(insurance_price == 0)
 					insurance_price_with_addition = 0
 
