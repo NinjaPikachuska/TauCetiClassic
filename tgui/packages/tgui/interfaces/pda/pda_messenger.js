@@ -56,15 +56,19 @@ const ActiveConversation = (props, context) => {
       <Section
         fill
         scrollable
-        title={'Conversation with ' + current_chat.name + ' (' + current_chat.job + ')'}
-      >
+        title={
+          'Conversation with ' +
+          current_chat.name +
+          ' (' +
+          current_chat.job +
+          ')'
+        }>
         {messages.map((message, i) => (
           <Box
             textAlign={message.outgoing ? 'right' : 'left'}
             position="relative"
             mb={1}
-            key={i}
-          >
+            key={i}>
             <Icon
               fontSize={2.5}
               color={message.outgoing ? '#4d9121' : '#cd7a0d'}
@@ -89,15 +93,9 @@ const ActiveConversation = (props, context) => {
                 'z-index': '1',
                 'border-radius': '10px',
                 'word-wrap': 'break-word',
-              }}
-            >
+              }}>
               {message.outgoing ? 'You:' : 'Them:'} {message.message}
-              <Box
-                textAlign="right"
-                italic
-                color="lightgray"
-                fontSize="10px"
-              >
+              <Box textAlign="right" italic color="lightgray" fontSize="10px">
                 {message.timestamp}
               </Box>
             </Box>
@@ -106,7 +104,7 @@ const ActiveConversation = (props, context) => {
       </Section>
       <Stack.Item>
         <Stack fill align="center">
-          {!!current_chat.can_reply && (
+          {(!!current_chat.can_reply && (
             <>
               <Stack.Item grow={1}>
                 <Input
@@ -114,10 +112,18 @@ const ActiveConversation = (props, context) => {
                   autoFocus
                   width="100%"
                   maxLength={1024}
-                  onInput={(e, value) => setMessageTexts({ ...messageTexts, [current_chat.ref]: value })}
+                  onInput={(e, value) =>
+                    setMessageTexts({
+                      ...messageTexts,
+                      [current_chat.ref]: value,
+                    })
+                  }
                   onEnter={(e, value) => {
                     act('Message', { message: value });
-                    setMessageTexts({ ...messageTexts, [current_chat.ref]: "" });
+                    setMessageTexts({
+                      ...messageTexts,
+                      [current_chat.ref]: '',
+                    });
                   }}
                 />
               </Stack.Item>
@@ -125,17 +131,17 @@ const ActiveConversation = (props, context) => {
                 icon="arrow-right"
                 onClick={() => {
                   act('Message', { message: messageTexts[current_chat.ref] });
-                  setMessageTexts({ ...messageTexts, [current_chat.ref]: "" });
+                  setMessageTexts({ ...messageTexts, [current_chat.ref]: '' });
                 }}
               />
             </>
-          ) || (
-            <Stack.Item grow={1}
+          )) || (
+            <Stack.Item
+              grow={1}
               color="red"
               textAlign="center"
               bold
-              fontSize="16px"
-            >
+              fontSize="16px">
               User is not available.
             </Stack.Item>
           )}
@@ -145,21 +151,23 @@ const ActiveConversation = (props, context) => {
   );
 };
 
-
-
 const MessengerList = (props, context) => {
   const { act } = useBackend(context);
 
   const data = props.data;
 
-  const [searchTerm, setSearchTerm] = useLocalState(
-    context,
-    "searchTerm",
-    ""
-  );
+  const [searchTerm, setSearchTerm] = useLocalState(context, 'searchTerm', '');
 
-  const { last_chats, available_chats, charges, silent, toff, ringtone_list, ringtone, searchTarget }
-    = data;
+  const {
+    last_chats,
+    available_chats,
+    charges,
+    silent,
+    toff,
+    ringtone_list,
+    ringtone,
+    searchTarget,
+  } = data;
 
   return (
     <Stack fill vertical>
@@ -169,15 +177,13 @@ const MessengerList = (props, context) => {
             <Button
               selected={!silent}
               icon={silent ? 'volume-mute' : 'volume-up'}
-              onClick={() => act('Toggle Ringer')}
-            >
+              onClick={() => act('Toggle Ringer')}>
               Ringer: {silent ? 'Off' : 'On'}
             </Button>
             <Button
               color={toff ? 'bad' : 'green'}
               icon="power-off"
-              onClick={() => act('Toggle Messenger')}
-            >
+              onClick={() => act('Toggle Messenger')}>
               Messenger: {toff ? 'Off' : 'On'}
             </Button>
             <br />
@@ -200,7 +206,8 @@ const MessengerList = (props, context) => {
               width="145px"
               options={Object.keys(ringtone_list)}
               onSelected={(value) =>
-                act('Available_Ringtones', { selected_ringtone: value })}
+                act('Available_Ringtones', { selected_ringtone: value })
+              }
             />
           </LabeledList.Item>
         </LabeledList>
@@ -239,13 +246,13 @@ const MessengerList = (props, context) => {
         title="Last Conversations"
         data={data}
         chats={last_chats}
-        chatAct={"Select Chat"}
+        chatAct={'Select Chat'}
         searchTerm={searchTarget ? searchTarget : searchTerm}
       />
       <PDAList
         title="All Conversations"
         chats={available_chats}
-        chatAct={"Create Chat"}
+        chatAct={'Create Chat'}
         data={data}
         searchTerm={searchTarget ? searchTarget : searchTerm}
       />
@@ -265,8 +272,8 @@ const PDAList = (props, context) => {
 
   const chatsAvailable = flow([
     filter(searcher),
-    sortBy(messenger => messenger.name),
-    sortBy(messenger => !messenger.has_unread),
+    sortBy((messenger) => messenger.name),
+    sortBy((messenger) => !messenger.has_unread),
   ])(chats);
 
   if (!chatsAvailable.length) {
@@ -281,15 +288,15 @@ const PDAList = (props, context) => {
             <Button
               fluid
               icon="comment"
-              iconColor={!!messenger.has_unread && "white"}
-              color={!!messenger.has_unread && "red"}
+              iconColor={!!messenger.has_unread && 'white'}
+              color={!!messenger.has_unread && 'red'}
               content={`${messenger.name} (${messenger.job})`}
               onClick={() => act(chatAct, { target: messenger.ref })}
             />
           </Stack.Item>
           <Stack.Item>
-            {!!charges
-              && plugins.map((plugin) => (
+            {!!charges &&
+              plugins.map((plugin) => (
                 <Button
                   key={plugin.ref}
                   icon={plugin.icon}
@@ -298,7 +305,8 @@ const PDAList = (props, context) => {
                     act('Messenger Plugin', {
                       plugin: plugin.ref,
                       target: messenger.ref,
-                    })}
+                    })
+                  }
                 />
               ))}
           </Stack.Item>

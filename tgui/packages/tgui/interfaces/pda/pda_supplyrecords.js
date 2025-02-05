@@ -26,16 +26,16 @@ export const pda_supplyrecords = (props, context) => {
         </LabeledList.Item>
       </LabeledList>
       <Section mt={1} title="Requested Orders">
-        {requests_count > 0
-          && requests.map((o) => (
+        {requests_count > 0 &&
+          requests.map((o) => (
             <Box key={o}>
               #{o.Number} - &quot;{o.Name}&quot; for &quot;{o.OrderedBy}&quot;
             </Box>
           ))}
       </Section>
       <Section title="Approved Orders">
-        {approved_count > 0
-          && approved.map((o) => (
+        {approved_count > 0 &&
+          approved.map((o) => (
             <Box key={o}>
               #{o.Number} - &quot;{o.Name}&quot; for &quot;{o.ApprovedBy}&quot;
             </Box>

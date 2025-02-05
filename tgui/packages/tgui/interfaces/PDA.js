@@ -66,9 +66,9 @@ export const PDA = (props, context) => {
                   tooltip="Refresh"
                   tooltipPosition="bottom-start"
                   icon="sync-alt"
-                  onClick={() => act("Refresh")} />
-              }
-            >
+                  onClick={() => act('Refresh')}
+                />
+              }>
               <App />
             </Section>
           </Stack.Item>

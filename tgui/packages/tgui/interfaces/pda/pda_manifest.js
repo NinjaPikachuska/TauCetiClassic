@@ -46,8 +46,7 @@ const ManifestTable = (props, context) => {
           <Table.Row
             color={HCC(person.rank)}
             key={person.name + person.rank}
-            backgroundColor={(i % 2 !== 0) && "rgba(255, 255, 255, 0.05)"}
-          >
+            backgroundColor={i % 2 !== 0 && 'rgba(255, 255, 255, 0.05)'}>
             <Table.Cell>
               <Button
                 icon="envelope"
@@ -58,8 +57,12 @@ const ManifestTable = (props, context) => {
                 onClick={() => act('Send Money', { name: person.name })}
               />
             </Table.Cell>
-            <Table.Cell bold={HBC(person.rank)}>{decodeHtmlEntities(person.name)}</Table.Cell>
-            <Table.Cell bold={HBC(person.rank)}>{decodeHtmlEntities(person.rank)}</Table.Cell>
+            <Table.Cell bold={HBC(person.rank)}>
+              {decodeHtmlEntities(person.name)}
+            </Table.Cell>
+            <Table.Cell bold={HBC(person.rank)}>
+              {decodeHtmlEntities(person.rank)}
+            </Table.Cell>
             <Table.Cell bold={HBC(person.rank)}>{person.active}</Table.Cell>
           </Table.Row>
         ))}
@@ -85,8 +88,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={heads} />
       </Section>
 
@@ -98,8 +100,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={sec} />
       </Section>
 
@@ -111,8 +112,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={eng} />
       </Section>
 
@@ -124,8 +124,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={med} />
       </Section>
 
@@ -137,8 +136,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={sci} />
       </Section>
 
@@ -150,8 +148,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={civ} />
       </Section>
 
@@ -163,8 +160,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={bot} />
       </Section>
 
@@ -176,8 +172,7 @@ export const pda_manifest = (props, context) => {
             </Box>
           </Box>
         }
-        level={2}
-      >
+        level={2}>
         <ManifestTable group={misc} />
       </Section>
     </Box>

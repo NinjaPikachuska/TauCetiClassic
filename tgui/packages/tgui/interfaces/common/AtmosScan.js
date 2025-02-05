@@ -34,8 +34,7 @@ export const AtmosScan = (props, context) => {
               item.poor_low,
               item.poor_high,
               item.bad_high
-            )}
-          >
+            )}>
             {item.val}
             {item.units}
           </LabeledList.Item>

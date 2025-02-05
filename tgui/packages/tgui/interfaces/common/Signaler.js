@@ -21,7 +21,8 @@ export const Signaler = (props, context) => {
             onDrag={(e, value) =>
               act('freq', {
                 freq: value,
-              })}
+              })
+            }
           />
         </LabeledList.Item>
         <LabeledList.Item label="Code">
@@ -36,7 +37,8 @@ export const Signaler = (props, context) => {
             onDrag={(e, value) =>
               act('code', {
                 code: value,
-              })}
+              })
+            }
           />
         </LabeledList.Item>
       </LabeledList>

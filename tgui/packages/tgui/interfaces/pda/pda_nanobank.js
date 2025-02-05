@@ -16,7 +16,14 @@ import {
 
 export const pda_nanobank = (props, context) => {
   const { act, data } = useBackend(context);
-  const { logged_in, owner_name, money, has_account, salary, owner_account_number } = data;
+  const {
+    logged_in,
+    owner_name,
+    money,
+    has_account,
+    salary,
+    owner_account_number,
+  } = data;
 
   if (!logged_in || !has_account) {
     return <LoginScreen />;
@@ -27,7 +34,9 @@ export const pda_nanobank = (props, context) => {
       <Box>
         <LabeledList>
           <LabeledList.Item label="Owner Name">{owner_name}</LabeledList.Item>
-          <LabeledList.Item label="Account Number">{owner_account_number}</LabeledList.Item>
+          <LabeledList.Item label="Account Number">
+            {owner_account_number}
+          </LabeledList.Item>
           <LabeledList.Item label="Balance">${money}</LabeledList.Item>
           <LabeledList.Item label="Salary">${salary}</LabeledList.Item>
         </LabeledList>
@@ -96,25 +105,25 @@ const Transfer = (props, context) => {
   const [selectedAccount, setSelectedAccount] = useLocalState(
     context,
     'selectedAccount',
-    ""
+    ''
   );
 
   const [transferComment, setTransferComment] = useLocalState(
     context,
     'transferComment',
-    ""
+    ''
   );
 
   const [manualEnteredAccount, setManualEnteredAccount] = useLocalState(
     context,
     'manualEnteredAccount',
-    ""
+    ''
   );
 
   const [searchTransferTerm, setSearchTransferTerm] = useLocalState(
     context,
     'searchTransferTerm',
-    ""
+    ''
   );
 
   const [manualEntry, setManualEntry] = useLocalState(
@@ -130,14 +139,20 @@ const Transfer = (props, context) => {
   );
 
   let accountNameMap = [];
-  available_accounts.map((account) => (accountNameMap[account.ref] = account.name));
+  available_accounts.map(
+    (account) => (accountNameMap[account.ref] = account.name)
+  );
 
   let accountNumMap = [];
-  available_accounts.map((account) => (accountNumMap[account.ref] = account.account_number));
+  available_accounts.map(
+    (account) => (accountNumMap[account.ref] = account.account_number)
+  );
 
-  const transferAccount = manualEntry ? manualEnteredAccount : accountNumMap[selectedAccount];
+  const transferAccount = manualEntry
+    ? manualEnteredAccount
+    : accountNumMap[selectedAccount];
 
-  const searcher = createSearch(searchTransferTerm, account => account.name);
+  const searcher = createSearch(searchTransferTerm, (account) => account.name);
 
   const accounts = available_accounts.filter(searcher);
 
@@ -151,8 +166,10 @@ const Transfer = (props, context) => {
               value={manualEnteredAccount}
               onInput={(e, value) => setManualEnteredAccount(value)}
             />
+          ) : selectedAccount ? (
+            `${accountNameMap[selectedAccount]}, ${accountNumMap[selectedAccount]}`
           ) : (
-            selectedAccount ? `${accountNameMap[selectedAccount]}, ${accountNumMap[selectedAccount]}` : "-------"
+            '-------'
           )}
           <Button
             ml={1}
@@ -181,17 +198,23 @@ const Transfer = (props, context) => {
             bold
             icon="paper-plane"
             width="auto"
-            disabled={money < transferAmount || !transferAmount || transferAmount <= 0 || !transferAccount}
+            disabled={
+              money < transferAmount ||
+              !transferAmount ||
+              transferAmount <= 0 ||
+              !transferAccount
+            }
             content="Send"
             onClick={() => {
               act('transfer', {
                 amount: transferAmount,
                 account_number: transferAccount,
-                comment: transferComment });
+                comment: transferComment,
+              });
               setTransferAmount(0);
-              setManualEnteredAccount("");
-              setTransferComment("");
-              setSelectedAccount("");
+              setManualEnteredAccount('');
+              setTransferComment('');
+              setSelectedAccount('');
             }}
           />
         </LabeledList.Item>
@@ -222,9 +245,7 @@ const Transfer = (props, context) => {
             ))}
           </>
         ) : (
-          <Box>
-            No accounts available.
-          </Box>
+          <Box>No accounts available.</Box>
         )}
       </Section>
     </Box>
@@ -244,62 +265,70 @@ const HeadOptions = (props, context) => {
     max_insurance_price,
   } = data;
 
-  const [insurancesToSend, setInsurancesToSend] = useLocalState(context, "insurancesToSend", {});
+  const [insurancesToSend, setInsurancesToSend] = useLocalState(
+    context,
+    'insurancesToSend',
+    {}
+  );
 
   return (
     <Box>
       {(!!cartridge_insurance_access || !!id_insurance_access) && (
         <Section title="Insurance Prices">
-          {!cartridge_insurance_access && (
-            <Box>
-              Insert your cartridge with access to insurance.
-            </Box>
-          ) || !id_insurance_access && (
-            <Box>
-              Insert your ID card with access to insurance.
-            </Box>
-          ) || (
-            <LabeledList>
-              {changable_insurances.map((insurance, i) => (
-                <LabeledList.Item key={i} label={insurance.name}>
-                  <NumberInput
-                    value={insurancesToSend[insurance.name] ? insurancesToSend[insurance.name] : 0}
-                    width="10%"
-                    minValue={0}
-                    maxValue={max_insurance_price}
-                    onChange={(e, value) => setInsurancesToSend({ ...insurancesToSend, [insurance.name]: value })}
+          {(!cartridge_insurance_access && (
+            <Box>Insert your cartridge with access to insurance.</Box>
+          )) ||
+            (!id_insurance_access && (
+              <Box>Insert your ID card with access to insurance.</Box>
+            )) || (
+              <LabeledList>
+                {changable_insurances.map((insurance, i) => (
+                  <LabeledList.Item key={i} label={insurance.name}>
+                    <NumberInput
+                      value={
+                        insurancesToSend[insurance.name]
+                          ? insurancesToSend[insurance.name]
+                          : 0
+                      }
+                      width="10%"
+                      minValue={0}
+                      maxValue={max_insurance_price}
+                      onChange={(e, value) =>
+                        setInsurancesToSend({
+                          ...insurancesToSend,
+                          [insurance.name]: value,
+                        })
+                      }
+                    />
+                    <Box inline>(Current: {insurance.price})</Box>
+                  </LabeledList.Item>
+                ))}
+                <LabeledList.Item>
+                  <Button.Confirm
+                    content="Change"
+                    icon="arrow-right"
+                    confirmIcon="arrow-right"
+                    disabled={is_insurance_price_change_on_cooldown}
+                    onClick={() =>
+                      act('change_insurance_price', {
+                        insurances: insurancesToSend,
+                      })
+                    }
                   />
-                  <Box inline>
-                    (Current: {insurance.price})
-                  </Box>
+                  {(!!is_insurance_price_change_on_cooldown && (
+                    <Box inline color="red">
+                      {insurance_price_change_cooldown}
+                      <Icon name="clock" />
+                    </Box>
+                  )) || (
+                    <Box inline>
+                      {insurance_price_change_default_cooldown}
+                      <Icon name="clock" />
+                    </Box>
+                  )}
                 </LabeledList.Item>
-              ))}
-              <LabeledList.Item>
-                <Button.Confirm
-                  content="Change"
-                  icon="arrow-right"
-                  confirmIcon="arrow-right"
-                  disabled={is_insurance_price_change_on_cooldown}
-                  onClick={() => act('change_insurance_price', { insurances: insurancesToSend })}
-                />
-                {!!is_insurance_price_change_on_cooldown && (
-                  <Box inline color="red">
-                    {insurance_price_change_cooldown}
-                    <Icon
-                      name="clock"
-                    />
-                  </Box>
-                ) || (
-                  <Box inline>
-                    {insurance_price_change_default_cooldown}
-                    <Icon
-                      name="clock"
-                    />
-                  </Box>
-                )}
-              </LabeledList.Item>
-            </LabeledList>
-          )}
+              </LabeledList>
+            )}
         </Section>
       )}
       <Section title="Salary Manager">
@@ -312,16 +341,16 @@ const HeadOptions = (props, context) => {
                     fluid
                     icon="dollar-sign"
                     content={`${account.name} (${account.rank}) ${account.salary}$`}
-                    onClick={() => act('change_salary', { account: account.account })}
+                    onClick={() =>
+                      act('change_salary', { account: account.account })
+                    }
                   />
                 </Stack.Item>
               </Stack>
             ))}
           </>
         ) : (
-          <Box>
-            No accounts available.
-          </Box>
+          <Box>No accounts available.</Box>
         )}
       </Section>
     </Box>
@@ -343,7 +372,6 @@ const AccountActions = (props, context) => {
 
   return (
     <LabeledList>
-
       <LabeledList.Item label="Account Security">
         <Button
           icon="user-lock"
@@ -353,7 +381,8 @@ const AccountActions = (props, context) => {
           onClick={() =>
             act('set_security', {
               new_security_level: 0,
-            })}
+            })
+          }
         />
         <Button
           icon="user-lock"
@@ -363,7 +392,8 @@ const AccountActions = (props, context) => {
           onClick={() =>
             act('set_security', {
               new_security_level: 1,
-            })}
+            })
+          }
         />
         <Button
           icon="user-lock"
@@ -373,7 +403,8 @@ const AccountActions = (props, context) => {
           onClick={() =>
             act('set_security', {
               new_security_level: 2,
-            })}
+            })
+          }
         />
       </LabeledList.Item>
       <LabeledList.Item label="Logout">
@@ -394,7 +425,9 @@ const AccountActions = (props, context) => {
             key={i}
             selected={insurance.name === owner_preferred_insurance_type}
             content={`${insurance.name} (${insurance.price}$)`}
-            onClick={() => act('change_preferred_insurance', { insurance: insurance.name })}
+            onClick={() =>
+              act('change_preferred_insurance', { insurance: insurance.name })
+            }
           />
         ))}
       </LabeledList.Item>
@@ -402,9 +435,14 @@ const AccountActions = (props, context) => {
         {insurances.map((insurance, i) => (
           <Button
             key={i}
-            disabled={insurance.name === owner_insurance_type || insurance.price_with_time_addition > money}
+            disabled={
+              insurance.name === owner_insurance_type ||
+              insurance.price_with_time_addition > money
+            }
             content={`${insurance.name} (${insurance.price_with_time_addition}$)`}
-            onClick={() => act('change_insurance_immediately', { insurance: insurance.name })}
+            onClick={() =>
+              act('change_insurance_immediately', { insurance: insurance.name })
+            }
           />
         ))}
         <br />
@@ -418,10 +456,16 @@ const AccountActions = (props, context) => {
           width="10%"
           minValue={0}
           maxValue={max_insurance_price}
-          onChange={(e, value) => act('change_max_insurance_payment', { max_insurance_payment: value })}
+          onChange={(e, value) =>
+            act('change_max_insurance_payment', {
+              max_insurance_payment: value,
+            })
+          }
         />
         <Tooltip content="If the preferred insurance becomes more expensive than this number, then a cheaper insurance will be chosen for you.">
-          <Box color="gray" inline>(?)</Box>
+          <Box color="gray" inline>
+            (?)
+          </Box>
         </Tooltip>
       </LabeledList.Item>
     </LabeledList>
@@ -442,7 +486,9 @@ const Transactions = (props, context) => {
         <Table.Cell>Terminal</Table.Cell>
       </Table.Row>
       {transaction_log.map((t, i) => (
-        <Table.Row key={t} backgroundColor={(i % 2 !== 0) && "rgba(255, 255, 255, 0.05)"}>
+        <Table.Row
+          key={t}
+          backgroundColor={i % 2 !== 0 && 'rgba(255, 255, 255, 0.05)'}>
           <Table.Cell>{t.time}</Table.Cell>
           <Table.Cell>{t.purpose}</Table.Cell>
           <Table.Cell color={t.is_deposit ? 'green' : 'red'}>
@@ -459,11 +505,7 @@ const Transactions = (props, context) => {
 const LoginScreen = (props, context) => {
   const { act, data } = useBackend(context);
 
-  const [accountID, setAccountID] = useLocalState(
-    context,
-    'accountID',
-    null
-  );
+  const [accountID, setAccountID] = useLocalState(context, 'accountID', null);
 
   const [accountPin, setAccountPin] = useLocalState(
     context,
@@ -497,10 +539,7 @@ const LoginScreen = (props, context) => {
           </LabeledList.Item>
           {login_fail_reason && (
             <LabeledList.Item>
-              <Box
-                color="red"
-                bold
-              >
+              <Box color="red" bold>
                 {login_fail_reason}
               </Box>
             </LabeledList.Item>
@@ -512,14 +551,14 @@ const LoginScreen = (props, context) => {
               onClick={() =>
                 act('login', {
                   account_pin: accountPin,
-                })}
+                })
+              }
             />
             <Button
               content="Logout"
               icon="sign-in-alt"
               color="red"
-              onClick={() =>
-                act('unlink')}
+              onClick={() => act('unlink')}
             />
           </LabeledList.Item>
         </LabeledList>
@@ -552,10 +591,7 @@ const LoginScreen = (props, context) => {
         </LabeledList.Item>
         {login_fail_reason && (
           <LabeledList.Item>
-            <Box
-              color="red"
-              bold
-            >
+            <Box color="red" bold>
               {login_fail_reason}
             </Box>
           </LabeledList.Item>
@@ -568,7 +604,8 @@ const LoginScreen = (props, context) => {
               act('link_account', {
                 account_num: accountID,
                 account_pin: accountPin,
-              })}
+              })
+            }
           />
         </LabeledList.Item>
       </LabeledList>

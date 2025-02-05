@@ -95,7 +95,8 @@ const BotStatus = (props, context) => {
             onClick={() =>
               act('set_pickup_type', {
                 autopick: !pick,
-              })}
+              })
+            }
           />
         </LabeledList.Item>
         <LabeledList.Item label="Auto Return">
@@ -105,7 +106,8 @@ const BotStatus = (props, context) => {
             onClick={() =>
               act('set_auto_return', {
                 autoret: !retn,
-              })}
+              })
+            }
           />
         </LabeledList.Item>
         <LabeledList.Item label="Controls">

@@ -36,7 +36,8 @@ export const pda_status_display = (props, context) => {
               act('Status', {
                 statdisp: 'alert',
                 alert: 'redalert',
-              })}
+              })
+            }
           />
           <Button
             color="transparent"
@@ -46,7 +47,8 @@ export const pda_status_display = (props, context) => {
               act('Status', {
                 statdisp: 'alert',
                 alert: 'default',
-              })}
+              })
+            }
           />
           <Button
             color="transparent"
@@ -56,7 +58,8 @@ export const pda_status_display = (props, context) => {
               act('Status', {
                 statdisp: 'alert',
                 alert: 'lockdown',
-              })}
+              })
+            }
           />
           <Button
             color="transparent"
@@ -66,7 +69,8 @@ export const pda_status_display = (props, context) => {
               act('Status', {
                 statdisp: 'alert',
                 alert: 'biohazard',
-              })}
+              })
+            }
           />
         </LabeledList.Item>
         <LabeledList.Item label="Message line 1">
