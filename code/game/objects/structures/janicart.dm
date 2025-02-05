@@ -1,3 +1,4 @@
+ADD_TO_GLOBAL_LIST(/obj/structure/stool/bed/chair/janitorialcart, janitorial_equipment)
 /obj/structure/stool/bed/chair/janitorialcart
 	name = "janitorial cart"
 	desc = "The ultimate in janitorial carts! Has space for water, mops, signs, trash bags, and more!"
@@ -28,12 +29,7 @@
 
 	var/signs = 0 //maximum capacity hardcoded below
 
-/obj/structure/stool/bed/chair/janitorialcart/atom_init()
-	. = ..()
-	janitorialcart_list += src
-
 /obj/structure/stool/bed/chair/janitorialcart/Destroy()
-	janitorialcart_list -= src
 	QDEL_NULL(mybag)
 	QDEL_NULL(mymop)
 	QDEL_NULL(myspray)

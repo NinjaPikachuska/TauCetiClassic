@@ -142,6 +142,7 @@ var/global/initial_station_money = 7500
 	global.centcomm_account.security_level = 2
 	global.centcomm_account.money = 10000000
 	global.centcomm_account.hidden = TRUE
+	global.centcomm_account.hidden_for_pda = TRUE
 	// Is needed in case admins want to have some !!!FUN!!!
 	SSeconomy.issue_founding_stock(global.centcomm_account.account_number, "Cargo", 10)
 	SSeconomy.issue_founding_stock(global.centcomm_account.account_number, "Medical", 10)
@@ -168,6 +169,7 @@ var/global/initial_station_money = 7500
 	station_account.remote_access_pin = rand(1111, 9999)
 	station_account.security_level = 1
 	station_account.money = global.initial_station_money
+	station_account.hidden_for_pda = TRUE
 	// Station gets a slight rebound on all cargo activity from stock ownership. In theory HoP or Captain can also sell this.
 	SSeconomy.issue_founding_stock(station_account.account_number, "Cargo", 10)
 	SSeconomy.issue_founding_stock(station_account.account_number, "Medical", 10)
@@ -191,6 +193,7 @@ var/global/initial_station_money = 7500
 	department_account.account_number = rand(111111, 999999)
 	department_account.remote_access_pin = rand(1111, 9999)
 	department_account.security_level = 1
+	department_account.hidden_for_pda = TRUE
 	department_account.money = 500
 
 	//create an entry in the account transaction log for when it was created

@@ -117,7 +117,8 @@
 			dat += "<ul>"
 			var/count = 0
 			for (var/obj/item/device/pda/P in PDAs)
-				if (!P.owner||P.toff)
+				var/datum/data/pda/app/messenger/PM = P.find_program(/datum/data/pda/app/messenger)
+				if (!PM || !PM.can_receive())
 					continue
 				dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
 				dat += "</li>"

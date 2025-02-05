@@ -612,12 +612,11 @@ SUBSYSTEM_DEF(job)
 		pda.ownjob = C.assignment
 		pda.assign(H.real_name)
 		pda.ownrank = C.rank
-		pda.check_rank(C.rank)
 
 		var/datum/money_account/MA = get_account(H.mind.get_key_memory(MEM_ACCOUNT_NUMBER))
-		pda.owner_account = MA.account_number //bind the account to the pda
-		pda.owner_fingerprints += C.fingerprint_hash //save fingerprints in pda from ID card
-		MA.owner_PDA = pda //add PDA in /datum/money_account
+		var/datum/data/pda/app/nanobank/NB = pda.find_program(/datum/data/pda/app/nanobank)
+		if(NB)
+			NB.link_account(MA)
 
 		var/chosen_ringtone = H.client?.prefs.chosen_ringtone
 		if(chosen_ringtone)

@@ -29,14 +29,18 @@
 		if(prob(2))
 			var/obj/item/device/pda/P
 			var/list/viables = list()
-			for(var/obj/item/device/pda/check_pda in sortAtom(PDAs))
-				if (!check_pda.owner||check_pda.toff||check_pda == src||check_pda.hidden)
+			var/datum/data/pda/app/messenger/PM
+			for(var/obj/item/device/pda/check_pda in PDAs)
+				PM = check_pda.find_program(/datum/data/pda/app/messenger)
+
+				if (!PM || !PM.can_receive())
 					continue
 				viables.Add(check_pda)
 
 			if(!viables.len)
 				return
 			P = pick(viables)
+			PM = P.find_program(/datum/data/pda/app/messenger)
 
 			var/sender
 			var/message
@@ -135,20 +139,6 @@
 					if(ai.pda != P && ai.pda != src)
 						to_chat(ai, "<i>Перехваченное сообщение от <b>[sender]</b></i> (Неизвестно / спам?) <i>to <b>[P:owner]</b>: [message]</i>")
 
-			//Commented out because we don't send messages like this anymore.  Instead it will just popup in their chat window.
-			//P.tnote += "<i><b>&larr; From [sender] (Unknown / spam?):</b></i><br>[message]<br>"
-
-			if (!P.message_silent)
-				playsound(P, 'sound/machines/twobeep.ogg', VOL_EFFECTS_MASTER)
-			if(!P.message_silent)
-				P.audible_message("[bicon(P)] *[P.ttone]*", hearing_distance = 3)
-			//Search for holder of the PDA.
-			var/mob/living/L = null
-			if(P.loc && isliving(P.loc))
-				L = P.loc
-			//Maybe they are a pAI!
-			else
-				L = get(P, /mob/living/silicon)
-
-			if(L)
-				to_chat(L, "[bicon(P)] <b>Сообщение от [sender] (Неизвестно / спам?), </b>\"[message]\" (Невозможно ответить)")
+			var/datum/pda_message/pm = new(message, FALSE, worldtime2text())
+			PM.add_message(pm, fake_name = sender)
+			PM.notify("<b>Сообщение от [sender] (Неизвестно / спам?), </b>\"[message]\"")

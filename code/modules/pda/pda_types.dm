@@ -89,7 +89,7 @@
 /obj/item/device/pda/mime
 	default_cartridge = /obj/item/weapon/cartridge/mime
 	icon_state = "pda-mime"
-	message_silent = 1
+	silent = TRUE
 	ttone = "silence"
 
 /obj/item/device/pda/velocity
@@ -145,7 +145,12 @@
 	icon_state = "pda-syn"
 	name = "Military PDA"
 	owner = "John Doe"
-	hidden = 1
+
+/obj/item/device/pda/syndicate/New()
+	..()
+	var/datum/data/pda/app/messenger/M = find_program(/datum/data/pda/app/messenger)
+	if(M)
+		M.m_hidden = TRUE
 
 /obj/item/device/pda/chaplain
 	icon_state = "pda-holy"
@@ -171,8 +176,7 @@
 /obj/item/device/pda/librarian
 	icon_state = "pda-libb"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a WGW-11 series e-reader."
-	note = "Congratulations, your station has chosen the Thinktronic 5290 WGW-11 Series E-reader and Personal Data Assistant!"
-	message_silent = 1 //Quiet in the library!
+	silent = TRUE //Quiet in the library!
 
 /obj/item/device/pda/reporter
 	icon_state = "pda-libc"
@@ -185,7 +189,6 @@
 /obj/item/device/pda/clear
 	icon_state = "pda-transp"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a special edition with a transparent case."
-	note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
 
 /obj/item/device/pda/chef
 	icon_state = "pda-chef"
@@ -211,111 +214,3 @@
 /obj/item/device/pda/blueshield
 	icon_state = "pda-blu"
 	default_pen = /obj/item/weapon/pen/edagger/legitimate
-
-// Special AI/pAI PDAs that cannot explode.
-/obj/item/device/pda/silicon
-	icon_state = "NONE"
-	ttone = "data"
-	detonate = 0
-
-
-/obj/item/device/pda/silicon/proc/set_name_and_job(newname, newjob, newrank)
-	owner = newname
-	ownjob = newjob
-	if(newrank)
-		ownrank = newrank
-	else
-		ownrank = ownjob
-	name = newname + " (" + ownjob + ")"
-
-
-//AI verb and proc for sending PDA messages.
-/obj/item/device/pda/silicon/verb/cmd_send_pdamesg()
-	set category = "AI Commands"
-	set name = "Send Message"
-	set src in usr
-	set hidden = 1
-	if(usr.stat == DEAD)
-		to_chat(usr, "You can't send PDA messages because you are dead!")
-		return
-	var/list/plist = available_pdas()
-	if (plist)
-		var/c = input(usr, "Please select a PDA") as null|anything in sortList(plist)
-		if (!c) // if the user hasn't selected a PDA file we can't send a message
-			return
-		var/selected = plist[c]
-		create_message(usr, selected)
-
-
-/obj/item/device/pda/silicon/verb/cmd_toggle_pda_receiver()
-	set category = "AI Commands"
-	set name = "Toggle Sender/Receiver"
-	set src in usr
-	if(usr.stat == DEAD)
-		to_chat(usr, "You can't do that because you are dead!")
-		return
-	toff = !toff
-	to_chat(usr, "<span class='notice'>PDA sender/receiver toggled [(toff ? "Off" : "On")]!</span>")
-
-
-/obj/item/device/pda/silicon/verb/cmd_toggle_pda_silent()
-	set category = "AI Commands"
-	set name = "Toggle Ringer"
-	set src in usr
-	if(usr.stat == DEAD)
-		to_chat(usr, "You can't do that because you are dead!")
-		return
-	message_silent = !message_silent
-	to_chat(usr, "<span class='notice'>PDA ringer toggled [(message_silent ? "Off" : "On")]!</span>")
-
-
-/obj/item/device/pda/silicon/verb/cmd_show_message_log()
-	set category = "AI Commands"
-	set name = "Show Message Log"
-	set src in usr
-	set hidden = 1
-	if(usr.stat == DEAD)
-		to_chat(usr, "You can't do that because you are dead!")
-		return
-	var/HTML = ""
-	for(var/index in tnote)
-		if(index["sent"])
-			HTML += addtext("<i><b>&rarr; To <a href='byond://?src=\ref[src];choice=Message;target=",index["src"],"'>", index["owner"],"</a>:</b></i><br>", index["message"], "<br>")
-		else
-			HTML += addtext("<i><b>&larr; From <a href='byond://?src=\ref[src];choice=Message;target=",index["target"],"'>", index["owner"],"</a>:</b></i><br>", index["message"], "<br>")
-
-	var/datum/browser/popup = new(usr, "log", "AI PDA Message Log", 400, 444)
-	popup.set_window_options("border=1;can_minimize=0")
-	popup.set_content(HTML)
-	popup.open()
-
-/obj/item/device/pda/silicon/can_use()
-	var/mob/living/silicon/ai/ai_user = loc
-	if(istype(ai_user) && ai_user.control_disabled)
-		return FALSE
-	else
-		var/mob/living/silicon/robot/borg_user = loc
-		if(istype(borg_user) && borg_user.incapacitated())
-			return FALSE
-	return TRUE
-
-/obj/item/device/pda/silicon/attack_self(mob/user)
-	if ((honkamt > 0) && (prob(60)))//For clown virus.
-		honkamt--
-		playsound(src, 'sound/items/bikehorn.ogg', VOL_EFFECTS_MASTER, 30)
-	return
-
-//Special PDA for robots
-
-/obj/item/device/pda/silicon/robot/cmd_toggle_pda_receiver()
-	set category = "Robot Commands"
-	set hidden = 1
-	..()
-
-/obj/item/device/pda/silicon/robot/cmd_toggle_pda_silent()
-	set category = "Robot Commands"
-	set hidden = 1
-	..()
-
-/obj/item/device/pda/silicon/pai
-	ttone = "assist"

@@ -245,15 +245,12 @@ log transactions
 							dat += "<input type='text' name='new_max_insurance_payment' value='[authenticated_account.owner_max_insurance_payment]' style='width:150px; background-color:white;'><input type='submit' value='Change max insurance payment'>"
 							dat += "</form><br><br>"
 
-
-							var/time_addition = round((SSeconomy.endtime - world.timeofday) / 600) * 10
-
 							for(var/insurance_type in SSeconomy.insurance_quality_decreasing)
 								dat += "<b>Insurance type|price:</b> [insurance_type]|$[SSeconomy.insurance_prices[insurance_type]]<br>"
 								var/insurance_price = SSeconomy.insurance_prices[insurance_type]
 								var/insurance_price_with_time_addition
 								if(insurance_price != 0)
-									insurance_price_with_time_addition = insurance_price + time_addition
+									insurance_price_with_time_addition = insurance_price + INSURANCE_TIME_ADDITION
 								else
 									insurance_price_with_time_addition = 0
 								dat += "<A href='?src=\ref[src];choice=change_insurance_immediately;insurance_type=[insurance_type];insurance_price=[insurance_price];presented_price=[insurance_price_with_time_addition]'>Change immediately ($[insurance_price_with_time_addition])</a> "
@@ -514,7 +511,7 @@ log transactions
 				R.fields["insurance_type"] = insurance_type
 
 				authenticated_account.owner_preferred_insurance_type = insurance_type
-				authenticated_account.owner_max_insurance_payment = max(presented_price, authenticated_account.owner_max_insurance_payment)
+				authenticated_account.owner_max_insurance_payment = max(insurance_price, authenticated_account.owner_max_insurance_payment)
 				if(insurance_price > 0)
 					charge_to_account(authenticated_account.account_number, "Medical", "[insurance_type] Insurance payment", "NT Insurance", -presented_price)
 					var/med_account_number = global.department_accounts["Medical"].account_number

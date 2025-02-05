@@ -54,7 +54,8 @@
 			if(!t||U.stat||U.wear_suit!=src||!s_initialized)//Wow, another one of these. Man...
 				display_to << browse(null, "window=spideros")
 				return
-			if(isnull(P)||P.toff)//So it doesn't freak out if the object no-longer exists.
+			var/datum/data/pda/app/messenger/PM = P.find_program(/datum/data/pda/app/messenger)
+			if (!PM || !PM.can_receive())
 				to_chat(display_to, "<span class='warning'>Error: unable to deliver message.</span>")
 				display_spideros()
 				return
@@ -76,7 +77,7 @@
 							continue
 						to_chat(M, "<span class='game say'>PDA Message - <span class='name'>[U]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
-				if (!P.message_silent)
+				if (!P.silent)
 					playsound(P, 'sound/machines/twobeep.ogg', VOL_EFFECTS_MASTER)
 					P.audible_message("[bicon(P)] *[P.ttone]*", hearing_distance = 3)
 				P.cut_overlays()

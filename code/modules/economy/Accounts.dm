@@ -14,11 +14,13 @@
 	var/owner_preferred_insurance_type = ""
 	var/owner_max_insurance_payment = 0
 	var/list/transaction_log = list()
-	var/obj/item/device/pda/owner_PDA = null	//contains a PDA linked to an account
+	var/list/assigned_pdas = list()	//contains PDAs linked to an account
 	var/suspended = 0
 	var/security_level = ACCOUNT_SECURITY_LEVEL_STANDARD
 	// Whether this account is hidden from databases. In the future, if required, abstract to Database ID, and make the financial database connect to said ID and view accounts only for that ID.
 	var/hidden = FALSE
+	// Is hidden for PDA nanobank
+	var/hidden_for_pda = FALSE
 
 	var/list/stocks
 	var/total_dividend_payouts = 0.0
@@ -100,8 +102,13 @@
 		type_change = "def"
 	change = type_change
 
-	if(owner_PDA)
-		owner_PDA.transaction_inform(null, user_name, salary_rate, TRUE)
+	for(var/datum/data/pda/app/nanobank/NB in assigned_pdas)
+		NB.salary_change_inform(user_name, salary_rate)
+
+/datum/money_account/proc/get_ui_data()
+	var/list/data = list()
+
+	return data
 
 /datum/transaction
 	var/target_name = ""
@@ -110,6 +117,20 @@
 	var/date = ""
 	var/time = ""
 	var/source_terminal = ""
+
+/datum/transaction/proc/get_ui_data()
+	var/list/data = list()
+
+	var/money_amount = text2num(amount) // why is T.amount sometimes a string and sometimes a num...
+	data["amount"] = isnull(money_amount) ? amount : abs(money_amount)
+
+	data["time"] = time
+	data["target_name"] = target_name
+	data["purpose"] = html_decode(purpose)
+	data["is_deposit"] = isnull(money_amount) ? FALSE : money_amount >= 0 // text2num can return null if T.amount isn't convertable (check the money_hacker.dm)
+	data["terminal"] = source_terminal
+
+	return data
 
 /proc/create_random_account_and_store_in_mind(mob/living/carbon/human/H, start_money = rand(50, 200) * 10, department_stocks=null)
 	var/datum/money_account/M = create_account(H.real_name, start_money, null, H.age)
@@ -145,44 +166,39 @@
 	M.remote_access_pin = rand(1111, 9999)
 	M.adjust_money(starting_funds)
 
-	//create an entry in the account transaction log for when it was created
+	if(!source_db)
+		M.account_number = rand(111111, 999999)
+		return M
+
 	var/datum/transaction/T = new()
 	T.target_name = new_owner_name
 	T.purpose = "Account creation"
 	T.amount = starting_funds
-	if(!source_db)
-		//set a random date, time and location some time over the past decade
-		T.date = "[num2text(rand(1,31))] [pick("January","February","March","April","May","June","July","August","September","October","November","December")], [game_year-rand(1,age)]"
-		T.time = "[rand(0,23)]:[rand(11,59)]"
-		T.source_terminal = "NTGalaxyNet Terminal #[rand(111,1111)]"
+	T.date = current_date_string
+	T.time = worldtime2text()
+	T.source_terminal = source_db.machine_id
 
-		M.account_number = rand(111111, 999999)
-	else
-		T.date = current_date_string
-		T.time = worldtime2text()
-		T.source_terminal = source_db.machine_id
+	M.account_number = next_account_number
+	next_account_number += rand(1,25)
 
-		M.account_number = next_account_number
-		next_account_number += rand(1,25)
+	//create a sealed package containing the account details
+	var/obj/item/smallDelivery/P = new /obj/item/smallDelivery(source_db.loc)
 
-		//create a sealed package containing the account details
-		var/obj/item/smallDelivery/P = new /obj/item/smallDelivery(source_db.loc)
+	var/obj/item/weapon/paper/R = new /obj/item/weapon/paper(P)
+	R.name = "Account information: [M.owner_name]"
+	R.info = "<b>Account details (confidential)</b><br><hr><br>"
+	R.info += "<i>Account holder:</i> [M.owner_name]<br>"
+	R.info += "<i>Account number:</i> [M.account_number]<br>"
+	R.info += "<i>Account pin:</i> [M.remote_access_pin]<br>"
+	R.info += "<i>Starting balance:</i> $[M.money]<br>"
+	R.info += "<i>Date and time:</i> [worldtime2text()], [current_date_string]<br><br>"
+	R.info += "<i>Creation terminal ID:</i> [source_db.machine_id]<br>"
+	R.info += "<i>Authorised NT officer overseeing creation:</i> [source_db.held_card.registered_name]<br>"
+	P.update_icon()
 
-		var/obj/item/weapon/paper/R = new /obj/item/weapon/paper(P)
-		R.name = "Account information: [M.owner_name]"
-		R.info = "<b>Account details (confidential)</b><br><hr><br>"
-		R.info += "<i>Account holder:</i> [M.owner_name]<br>"
-		R.info += "<i>Account number:</i> [M.account_number]<br>"
-		R.info += "<i>Account pin:</i> [M.remote_access_pin]<br>"
-		R.info += "<i>Starting balance:</i> $[M.money]<br>"
-		R.info += "<i>Date and time:</i> [worldtime2text()], [current_date_string]<br><br>"
-		R.info += "<i>Creation terminal ID:</i> [source_db.machine_id]<br>"
-		R.info += "<i>Authorised NT officer overseeing creation:</i> [source_db.held_card.registered_name]<br>"
-		P.update_icon()
-
-		//stamp the paper
-		var/obj/item/weapon/stamp/centcomm/S = new
-		S.stamp_paper(R, "Accounts Database")
+	//stamp the paper
+	var/obj/item/weapon/stamp/centcomm/S = new
+	S.stamp_paper(R, "Accounts Database")
 
 	//add the account
 	M.transaction_log.Add(T)
@@ -205,8 +221,8 @@
 			T.source_terminal = terminal_id
 			D.transaction_log.Add(T)
 
-			if(D.owner_PDA)
-				D.owner_PDA.transaction_inform(source_name, terminal_id, money)
+			for(var/datum/data/pda/app/nanobank/NB in D.assigned_pdas)
+				NB.transaction_inform(source_name, terminal_id, money)
 
 			if(terminal_id == CARGOSHOPNAME && attempt_account_number == global.cargo_account.account_number)
 				global.online_shop_profits += money
@@ -231,8 +247,9 @@
 		T.source_terminal = terminal_id
 		D.transaction_log.Add(T)
 
-		if(D.owner_PDA && pda_inform)
-			D.owner_PDA.transaction_stock_inform(source_name, terminal_id, department, amount)
+		if(pda_inform)
+			for(var/datum/data/pda/app/nanobank/NB in D.assigned_pdas)
+				NB.transaction_stock_inform(source_name, terminal_id, department, amount)
 
 		return TRUE
 	return FALSE

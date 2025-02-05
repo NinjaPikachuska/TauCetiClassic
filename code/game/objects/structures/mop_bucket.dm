@@ -1,3 +1,4 @@
+ADD_TO_GLOBAL_LIST(/obj/structure/mopbucket, janitorial_equipment)
 /obj/structure/mopbucket
 	name = "mop bucket"
 	desc = "Fill it with water, but don't forget a mop!"
@@ -10,11 +11,6 @@
 /obj/structure/mopbucket/atom_init()
 	create_reagents(100)
 	. = ..()
-	mopbucket_list += src
-
-/obj/structure/mopbucket/Destroy()
-	mopbucket_list -= src
-	return ..()
 
 /obj/structure/mopbucket/is_open_container()
 	return TRUE

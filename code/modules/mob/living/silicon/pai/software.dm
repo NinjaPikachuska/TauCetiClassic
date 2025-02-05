@@ -293,16 +293,19 @@
 
 		if("pdamessage")
 			if(!isnull(pda))
+				var/datum/data/pda/app/messenger/M = pda.find_program(/datum/data/pda/app/messenger)
+				if(!M)
+					return
 				if(href_list["toggler"])
-					pda.toff = !pda.toff
+					M.toff = !M.toff
 				else if(href_list["ringer"])
-					pda.message_silent = !pda.message_silent
+					pda.silent = !pda.silent
 				else if(href_list["target"])
 					if(silence_time)
 						return tgui_alert(usr, "Communications circuits remain uninitialized.")
 
 					var/target = locate(href_list["target"])
-					pda.create_message(src, target)
+					M.create_message(src, target)
 
 		// Accessing medical records
 		if("medicalrecord")
@@ -452,15 +455,16 @@
 					A.disabled = !A.disabled
 		if(istype(hackobj, /obj/item/device/pda)) //Toggle Messenger, Ringtone, Toggle Ringtone, Toggle Hide/Unhide, Change shown name
 			var/obj/item/device/pda/A = hackobj
+			var/datum/data/pda/app/messenger/M = A.find_program(/datum/data/pda/app/messenger)
 			switch(interaction_type)
 				if(INTERACTION_PDA_TOGGLE_MSG)
-					A.toff = !A.toff
+					M?.toff = !M?.toff
 				if(INTERACTION_PDA_CHANGE_RINGTONE)
 					A.ttone = input("Input new ringtone.", "PDA exploiter", "beep") as text
 				if(INTERACTION_PDA_TOGGLE_RINGTONE)
-					A.message_silent = !A.message_silent
+					A.silent = !A.silent
 				if(INTERACTION_PDA_TOGGLE_VISIBLE)
-					A.hidden = !A.hidden
+					M?.hidden = !M?.hidden
 				if(INTERACTION_PDA_CHANGE_NAME)
 					var/towner = input("Insert new name here.", "PDA exploiter", A.owner) as text
 					var/tjob = input("Insert new job here.", "PDA exploiter", A.ownjob) as text
@@ -588,7 +592,8 @@
 	dat += "<b>Basic</b> <br>"
 	for(var/s in src.software)
 		if(s == "digital messenger")
-			dat += "<a href='byond://?src=\ref[src];software=pdamessage;sub=0'>Digital Messenger</a> [(pda.toff) ? "<font color=#FF5555>•</font>" : "<font color=#55FF55>•</font>"] <br>"
+			var/datum/data/pda/app/messenger/M = pda.find_program(/datum/data/pda/app/messenger)
+			dat += "<a href='byond://?src=\ref[src];software=pdamessage;sub=0'>Digital Messenger</a> [(M?.toff) ? "<font color=#FF5555>•</font>" : "<font color=#55FF55>•</font>"] <br>"
 		if(s == "crew manifest")
 			dat += "<a href='byond://?src=\ref[src];software=manifest;sub=0'>Crew Manifest</a> <br>"
 		if(s == "medical records")
@@ -917,11 +922,13 @@
 				dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_AUTOLATHE_POWER];sub=0'>Toggle Active State</a> (Currently [Temp.disabled ? "Disabled" : "Active"]) <br>"
 			if(istype(hackobj, /obj/item/device/pda))
 				var/obj/item/device/pda/Temp = hackobj
+				var/datum/data/pda/app/messenger/M = Temp.find_program(/datum/data/pda/app/messenger)
 				dat += "PDA.<br>"
-				dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_TOGGLE_MSG];sub=0'>Toggle Messenger</a> (Currently [Temp.toff == 0 ? "Active" : "Disabled"]) <br>"
+				if(M)
+					dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_TOGGLE_VISIBLE];sub=0'>Hide/Unhide PDA</a> (Currently [M.hidden == 0 ? "Visible" : "Hidden"]) <br>"
+					dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_TOGGLE_MSG];sub=0'>Toggle Messenger</a> (Currently [M.toff == 0 ? "Active" : "Disabled"]) <br>"
 				dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_CHANGE_RINGTONE];sub=0'>Change Ringtone</a> (Current: [Temp.ttone]) <br>"
-				dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_TOGGLE_RINGTONE];sub=0'>Toggle Ringtone</a> (Currently [Temp.message_silent == 0 ? "Active" : "Disabled"]) <br>"
-				dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_TOGGLE_VISIBLE];sub=0'>Hide/Unhide PDA</a> (Currently [Temp.hidden == 0 ? "Visible" : "Hidden"]) <br>"
+				dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_TOGGLE_RINGTONE];sub=0'>Toggle Ringtone</a> (Currently [Temp.silent == 0 ? "Active" : "Disabled"]) <br>"
 				dat += "<a href='byond://?src=\ref[src];software=interaction;interactwith=[INTERACTION_PDA_CHANGE_NAME];sub=0'>Change Shown Name/Job</a> (Current: [Temp.owner] as [Temp.ownrank]) <br>"
 			if(istype(hackobj, /obj/item/device/paicard))
 				var/obj/item/device/paicard/Temp = hackobj
@@ -1023,27 +1030,31 @@
 /mob/living/silicon/pai/proc/pdamessage()
 
 	var/dat = "<h2>Digital Messenger</h2><hr>"
+	var/datum/data/pda/app/messenger/M = pda.find_program(/datum/data/pda/app/messenger)
 	dat += {"<b>Signal/Receiver Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;toggler=1'>
-	[(pda.toff) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br>
+	[(M?.toff) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br>
 	<b>Ringer Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;ringer=1'>
-	[(pda.message_silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
+	[(pda.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
-	if(!pda.toff)
-		for (var/obj/item/device/pda/P in sortAtom(PDAs))
-			if (!P.owner||P.toff||P == src.pda||P.hidden)	continue
+	if(M && !M.toff)
+		for (var/obj/item/device/pda/P in PDAs)
+			var/datum/data/pda/app/messenger/PM = P.find_program(/datum/data/pda/app/messenger)
+			if (!PM || !PM.can_receive() || P == pda)
+				continue
 			dat += "<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>"
 			dat += "</li>"
 	dat += "</ul>"
 	dat += "Messages: <hr>"
 
-	dat += "<style>td.a { vertical-align:top; }</style>"
-	dat += "<table>"
-	for(var/index in pda.tnote)
-		if(index["sent"])
-			dat += addtext("<tr><td class='a'><i><b>To</b></i></td><td class='a'><i><b>&rarr;</b></i></td><td><i><b><a href='byond://?src=\ref[src];software=pdamessage;target=",index["src"],"'>", index["owner"],"</a>: </b></i>", index["message"], "<br></td></tr>")
-		else
-			dat += addtext("<tr><td class='a'><i><b>From</b></i></td><td class='a'><i><b>&rarr;</b></i></td><td><i><b><a href='byond://?src=\ref[src];software=pdamessage;target=",index["target"],"'>", index["owner"],"</a>: </b></i>", index["message"], "<br></td></tr>")
-	dat += "</table>"
+	if(!M)
+		return dat
+
+	for(var/chat_ref in M.chats)
+		var/datum/pda_chat/pc = M.chats[chat_ref]
+		dat += "<b><a href='byond://?src=[REF(M)];choice=Message;target=[REF(pc.recipient?.resolve())]'>[pc.get_recipient_name()] ([pc.get_recipient_job()])</a></b><br>"
+		for(var/datum/pda_message/pm in pc.messages)
+			dat += "[pm.outgoing ? "&rarr;" : "&larr;"] <i>[pm.message]</i><br>"
+
 	return dat
 
 /mob/living/silicon/pai/proc/translator_toggle()

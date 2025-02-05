@@ -1,3 +1,4 @@
+ADD_TO_GLOBAL_LIST(/obj/item/weapon/mop, janitorial_equipment)
 /obj/item/weapon/mop
 	desc = "The world of janitalia wouldn't be complete without a mop."
 	name = "mop"
@@ -17,7 +18,6 @@
 /obj/item/weapon/mop/atom_init()
 	create_reagents(5)
 	. = ..()
-	mop_list += src
 
 	var/datum/swipe_component_builder/SCB = new
 	SCB.can_push = TRUE
@@ -35,10 +35,6 @@
 	SCB.on_sweep_pull = CALLBACK(src, TYPE_PROC_REF(/obj/item/weapon/mop, on_sweep_pull))
 
 	AddComponent(/datum/component/swiping, SCB)
-
-/obj/item/weapon/mop/Destroy()
-	mop_list -= src
-	return ..()
 
 /obj/item/weapon/mop/proc/clean(turf/simulated/T, amount)
 	if(!istype(T))
