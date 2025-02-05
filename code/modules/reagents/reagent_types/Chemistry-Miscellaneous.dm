@@ -125,7 +125,7 @@
 
 /datum/reagent/thermite/reaction_turf(turf/T, volume)
 	. = ..()
-	if(volume >= 30)
+	if(volume >= 15)
 		if(iswallturf(T))
 			var/turf/simulated/wall/W = T
 			W.thermite = 1
@@ -559,7 +559,7 @@
 				spawn(60)
 					if(spawning_horror)
 						to_chat(M, pick( "<b><span class='warning'>Something bursts out from inside you!</span></b>"))
-						message_admins("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots. (<A HREF='?_src_=holder;adminmoreinfo=\ref[H]'>?</A>) [ADMIN_JMP(H)]")
+						message_admins("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots. (<A href='byond://?_src_=holder;adminmoreinfo=\ref[H]'>?</A>) [ADMIN_JMP(H)]")
 						log_game("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots")
 						new /mob/living/simple_animal/hostile/cyber_horror(H.loc)
 						spawning_horror = 0
@@ -919,3 +919,30 @@ TODO: Convert everything to custom hair dye. ~ Luduk.
 	..()
 	M.adjustToxLoss(REM)
 	return FALSE
+
+/datum/reagent/consumable/drink/liquidelectricity
+	name = "Liquid Electricity"
+	description = "The blood of some aliens, and the stuff that keeps them going. It works like an energy drink."
+	id = "liquidelectricity"
+	nutriment_factor = 5
+	taste_strength = 5
+	color = "#97ee63"
+	taste_message = "pure electricity"
+
+/datum/reagent/consumable/drink/liquidelectricity/on_general_digest(mob/living/M)
+	..()
+	var/shock_power = rand(5, 10)
+	if(prob(shock_power * 10))
+		M.electrocute_act(shock_power)
+
+/datum/reagent/consumable/drink/liquidelectricity/reaction_mob(mob/M, method=TOUCH, volume)
+	. = ..()
+	new /obj/effect/effect/sparks/electricity_spark(get_turf(M))
+
+/datum/reagent/consumable/drink/liquidelectricity/reaction_obj(obj/O, volume)
+	. = ..()
+	new /obj/effect/effect/sparks/electricity_spark(get_turf(O))
+
+/datum/reagent/consumable/drink/liquidelectricity/reaction_turf(turf/T, volume)
+	. = ..()
+	new /obj/effect/effect/sparks/electricity_spark(T)

@@ -62,6 +62,10 @@
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
 	)
+	premium = list(
+		/obj/item/weapon/reagent_containers/glass/beaker/teapot = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/flask/vacuumflask = 2,
+	)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 15,
@@ -148,6 +152,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/chinese/sweetsourchickenball = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chinese/newdles = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chinese/rice = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/chinese/lunarice = 12,
 		/obj/item/weapon/kitchen/utensil/fork/sticks = 18,
 	)
 	prices = list(
@@ -156,6 +161,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/chinese/sweetsourchickenball = 25,
 		/obj/item/weapon/reagent_containers/food/snacks/chinese/newdles = 25,
 		/obj/item/weapon/reagent_containers/food/snacks/chinese/rice = 25,
+		/obj/item/weapon/reagent_containers/food/snacks/chinese/lunarice = 50,
 		/obj/item/weapon/kitchen/utensil/fork/sticks = 1,
 	)
 	refill_canister = /obj/item/weapon/vending_refill/chinese

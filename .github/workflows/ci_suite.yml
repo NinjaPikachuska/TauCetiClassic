@@ -8,7 +8,7 @@ on:
       - master
 env:
   BYOND_MAJOR: 515
-  BYOND_MINOR: 1619
+  BYOND_MINOR: 1637
   SPACEMAN_DMM_VERSION: suite-1.8
 jobs:
   DreamChecker:
@@ -42,7 +42,7 @@ jobs:
       - name: Code and Map Linting
         env:
           TEST: LINTING
-          NODE_VERSION: 12
+          NODE_VERSION: 20
         run: |
           bash test/run-test.sh
           bash scripts/build_tgui.sh

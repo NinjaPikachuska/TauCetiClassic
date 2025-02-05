@@ -6,13 +6,15 @@
 //place to another. Look at escape shuttle for example.
 //All shuttles show now be under shuttle since we have smooth-wall code.
 
+// Respectful request when adding new zones, add RU cases. Since zones are starting to be actively used in translation.
+
 /area/shuttle
 	name = "Shuttle"
 	cases = list("шаттл", "шаттла", "шаттлу", "шаттл", "шаттлом", "шаттле")
 	icon_state = "shuttle"
 	requires_power = 0
 	valid_territory = 0
-	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
+	dynamic_lighting = TRUE
 
 /area/shuttle/atom_init()
 	if(!canSmoothWithAreas)
@@ -69,7 +71,7 @@
 /area/shuttle/arrival/velocity/Entered(mob/M)
 	..()
 	if(istype(M) && M.client)
-		M.client.guard.time_velocity_shuttle = world.timeofday
+		M.client.prefs.guard.time_velocity_shuttle = world.timeofday
 
 /area/shuttle/arrival/transit
 	name = "Space"
@@ -260,17 +262,19 @@
 	icon_state = "shuttlered2"
 	looped_ambience = 'sound/ambience/loop_space.ogg'
 
-//Administration Centcom Shuttle
-/area/shuttle/administration/centcom
-	name = "Administration Shuttle Centcom"
-	cases = list("административный шаттл", "административного шаттла", "административному шаттлу", "административный шаттл", "административным шаттлом", "административном шаттле")
+//Space Traders Shuttle
+/area/shuttle/trader
+	name = "Trader Shuttle"
+	cases = list("торговый шаттл", "торгового шаттла", "торговому шаттлу", "торговый шаттл", "торговым шаттлом", "торговом шаттле")
 	icon_state = "shuttlered"
 
-/area/shuttle/administration/station
-	name = "Administration Shuttle"
-	cases = list("административный шаттл", "административного шаттла", "административному шаттлу", "административный шаттл", "административным шаттлом", "административном шаттле")
+/area/shuttle/trader/station
+	name = "Trader Shuttle Station"
+	ambience = 'sound/ambience/space_traders.ogg'
+
+/area/shuttle/trader/space
+	name = "Trader Shuttle Space"
 	icon_state = "shuttlered2"
-	looped_ambience = 'sound/ambience/loop_space.ogg'
 
 //Vox shuttle
 /area/shuttle/vox/arkship
@@ -291,25 +295,25 @@
 
 /area/shuttle/vox/southwest_solars
 	name = "Aft port solars"
-	cases = list("кормовые солнечные панели по левому борту", "кормовых солнечных панелей по левому борту", "кормовым солнечным панелям по левому борту", "кормовые солнечные панели по левому борту", "кормовыми солнечными панелями по левому борту", "кормовых солнечных панелях по левому борту")
+	cases = list("юго-западные солнечные панели", "юго-западных солнечных панелей", "юго-западным солнечным панелям", "юго-западные солнечные панели", "юго-западными солнечными панелями", "юго-западных солнечных панелях")
 	icon_state = "southwest"
 	looped_ambience = 'sound/ambience/loop_space.ogg'
 
 /area/shuttle/vox/northwest_solars
 	name = "Fore port solars"
-	cases = list("носовые солнечные панели по левому борту", "носовых солнечных панелей по левому борту", "носовым солнечным панелям по левому борту", "носовые солнечные панели по левому борту", "носовыми солнечными панелями по левому борту", "носовых солнечных панелях по левому борту")
+	cases = list("северо-западные солнечные панели", "северо-западных солнечных панелей", "северо-западным солнечным панелям", "северо-западные солнечные панели", "северо-западными солнечными панелями", "северо-западных солнечных панелях")
 	icon_state = "northwest"
 	looped_ambience = 'sound/ambience/loop_space.ogg'
 
 /area/shuttle/vox/northeast_solars
 	name = "Fore starboard solars"
-	cases = list("носовые солнечные панели по правому борту", "носовых солнечных панелей по правому борту", "носовым солнечным панелям по правому борту", "носовые солнечные панели по правому борту", "носовыми солнечными панелями по правому борту", "носовых солнечных панелях по правому борту")
+	cases = list("северо-восточные солнечные панели", "северо-восточных солнечных панелей", "северо-восточным солнечным панелям", "северо-восточные солнечные панели", "северо-восточными солнечными панелями", "северо-восточных солнечных панелях")
 	icon_state = "northeast"
 	looped_ambience = 'sound/ambience/loop_space.ogg'
 
 /area/shuttle/vox/southeast_solars
 	name = "Aft starboard solars"
-	cases = list("кормовые солнечные панели по правому борту", "кормовых солнечных панелей по правому борту", "кормовым солнечным панелям по правому борту", "кормовые солнечные панели по правому борту", "кормовыми солнечными панелями по правому борту", "кормовых солнечных панелях по правому борту")
+	cases = list("юго-восточные солнечные панели", "юго-восточных солнечных панелей", "юго-восточным солнечным панелям", "юго-восточные солнечные панели", "юго-восточными солнечными панелями", "юго-восточных солнечных панелях")
 	icon_state = "southeast"
 	looped_ambience = 'sound/ambience/loop_space.ogg'
 
@@ -388,7 +392,6 @@ var/global/list/centcom_shuttle_areas = list (
 	/area/shuttle/escape_pod3/centcom,
 	/area/shuttle/escape_pod4/centcom,
 	/area/shuttle/transport1/centcom,
-	/area/shuttle/administration/centcom,
 	/area/shuttle/specops/centcom,
 	/area/shuttle/officer/centcom
 )
@@ -401,7 +404,7 @@ var/global/list/station_shuttle_areas = list (
 	/area/shuttle/escape_pod3/station,
 	/area/shuttle/escape_pod4/station,
 	/area/shuttle/transport1/station,
-	/area/shuttle/administration/station,
+	/area/shuttle/trader/station,
 	/area/shuttle/specops/station,
 	/area/shuttle/officer/station,
 	/area/shuttle/supply/station,

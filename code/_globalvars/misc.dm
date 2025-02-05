@@ -47,6 +47,7 @@ var/global/list/ignore_vision_inside = list(
 var/global/datum/religion/chaplain/chaplain_religion
 // Cultists religion. You/I can change it?
 var/global/datum/religion/cult/cult_religion
+var/global/datum/religion/pluvia/pluvia_religion
 var/global/list/datum/religion/all_religions = list()
 
 //Used for global activation of pylons
@@ -60,3 +61,6 @@ var/global/gametime_offset = 12 HOURS //Deciseconds to add to world.time for sta
 var/global/playsound_frequency_admin = 0	// Admin var for shitspawn via Secrets panel
 
 var/global/insurance_price_change_cd
+
+var/global/nuclear_siren_cooldown = 0
+

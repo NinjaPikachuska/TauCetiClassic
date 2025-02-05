@@ -34,7 +34,7 @@
 	Changing this around would probably require a good look-over the pre-existing code.
 	*/
 	var/atom/movable/screen/zone_sel/zone_sel = null
-	var/atom/movable/screen/leap/leap_icon = null
+	var/atom/movable/screen/leap_icon = null
 	var/atom/movable/screen/neurotoxin_icon = null
 	var/atom/movable/screen/healthdoll = null
 	var/atom/movable/screen/nutrition_icon = null
@@ -50,6 +50,7 @@
 	var/lastattacker_name = ""
 	var/lastattacker_key = ""
 	var/last_examined = ""
+	var/last_z
 	var/attack_log = list( )
 	var/obj/machinery/machine = null
 	var/other_mobs = null

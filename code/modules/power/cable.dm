@@ -70,7 +70,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	cable_list += src //add it to the global cable list
 	update_icon()
 
-	AddElement(/datum/element/undertile, use_alpha = TRUE)
+	AddElement(/datum/element/undertile, TRAIT_T_RAY_VISIBLE, use_alpha = TRUE)
 
 /obj/structure/cable/Destroy()						// called when a cable is deleted
 	if(SSmachines.stop_powernet_processing)
@@ -142,7 +142,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		shock(user, 5, 0.2)
 
 	else
-		if (W.flags & CONDUCT)
+		if((W.flags & CONDUCT) || HAS_TRAIT(user, TRAIT_CONDUCT))
 			shock(user, 50, 0.7)
 
 	add_fingerprint(user)
@@ -166,7 +166,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 //Intent harm attackby. Destroying cable makes shock to user
 /obj/structure/cable/attacked_by(obj/item/attacking_item, mob/living/user, def_zone, power)
-	if(attacking_item.flags & CONDUCT)
+	if((attacking_item.flags & CONDUCT) || HAS_TRAIT(user, TRAIT_CONDUCT))
 		shock(user, 100)
 	return ..()
 

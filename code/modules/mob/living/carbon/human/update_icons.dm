@@ -1,3 +1,4 @@
+#define BODY_ICON(icon, fat_icon, icon_state) (!fat) ? mutable_appearance(icon, icon_state, -BODY_LAYER) : mutable_appearance(fat_icon, icon_state, -BODY_LAYER)
 	///////////////////////
 	//UPDATE_ICONS SYSTEM//
 	///////////////////////
@@ -99,7 +100,7 @@ Please contact me on #coderbus IRC. ~Carn x
 	var/icon_path = def_icon_path
 
 	var/t_state
-	if(sprite_sheet_slot in list(SPRITE_SHEET_HELD, SPRITE_SHEET_GLOVES, SPRITE_SHEET_BELT, SPRITE_SHEET_UNIFORM, SPRITE_SHEET_UNIFORM_FAT))
+	if(sprite_sheet_slot in list(SPRITE_SHEET_HELD, SPRITE_SHEET_GLOVES, SPRITE_SHEET_BELT, SPRITE_SHEET_UNIFORM, SPRITE_SHEET_UNIFORM_FAT, SPRITE_SHEET_EARS))
 		t_state = item_state
 		if(!icon_custom)
 			icon_state_appendix = null
@@ -118,7 +119,7 @@ Please contact me on #coderbus IRC. ~Carn x
 	else if(S.sprite_sheets[sprite_sheet_slot])
 		icon_path = S.sprite_sheets[sprite_sheet_slot]
 
-	if(!(t_state in icon_states(icon_path)))
+	if(!("[t_state][icon_state_appendix]" in icon_states(icon_path)))
 		icon_path = def_icon_path
 
 	var/fem = ""
@@ -214,32 +215,31 @@ Please contact me on #coderbus IRC. ~Carn x
 
 	//Underwear
 	if((underwear > 0) && (underwear < 12) && species.flags[HAS_UNDERWEAR])
-		if(!fat)
-			var/mutable_appearance/MA = mutable_appearance('icons/mob/human.dmi', "underwear[underwear]_[g]_s", -BODY_LAYER)
-			MA.pixel_x += species.offset_features[OFFSET_UNIFORM][1]
-			MA.pixel_y += species.offset_features[OFFSET_UNIFORM][2]
-			MA = update_height(MA, TRUE)
-			standing += MA
+		var/mutable_appearance/MA = BODY_ICON('icons/mob/human_underwear.dmi', 'icons/mob/human_underwear_fat.dmi', "underwear[underwear]_[g]_s")
+		MA.pixel_x += species.offset_features[OFFSET_UNIFORM][1]
+		MA.pixel_y += species.offset_features[OFFSET_UNIFORM][2]
+		MA = update_height(MA, TRUE)
+		standing += MA
 
 	if((undershirt > 0) && (undershirt < undershirt_t.len) && species.flags[HAS_UNDERWEAR])
-		if(!fat)
-			var/mutable_appearance/MA = mutable_appearance('icons/mob/human_undershirt.dmi', "undershirt[undershirt]_s", -BODY_LAYER)
-			MA.pixel_x += species.offset_features[OFFSET_UNIFORM][1]
-			MA.pixel_y += species.offset_features[OFFSET_UNIFORM][2]
-			MA = update_height(MA, TRUE)
-			standing += MA
+		var/mutable_appearance/MA = BODY_ICON('icons/mob/human_undershirt.dmi', 'icons/mob/human_undershirt_fat.dmi', "undershirt[undershirt]_s_[g]")
+		MA.pixel_x += species.offset_features[OFFSET_UNIFORM][1]
+		MA.pixel_y += species.offset_features[OFFSET_UNIFORM][2]
+		MA = update_height(MA, TRUE)
+		standing += MA
 
-	if(!fat && socks > 0 && socks < socks_t.len && species.flags[HAS_UNDERWEAR])
+	if(socks > 0 && socks < socks_t.len && species.flags[HAS_UNDERWEAR])
 		var/obj/item/organ/external/r_foot = bodyparts_by_name[BP_R_LEG]
 		var/obj/item/organ/external/l_foot = bodyparts_by_name[BP_L_LEG]
 		if(r_foot && !r_foot.is_stump && l_foot && !l_foot.is_stump)
-			var/mutable_appearance/MA = mutable_appearance('icons/mob/human_socks.dmi', "socks[socks]_s", -BODY_LAYER)
+			var/mutable_appearance/MA = BODY_ICON('icons/mob/human_socks.dmi', 'icons/mob/human_socks_fat.dmi', "socks[socks]_s_[g]")
 			MA.pixel_x += species.offset_features[OFFSET_SHOES][1]
 			MA.pixel_y += species.offset_features[OFFSET_SHOES][2]
 			MA = update_height(MA, TRUE)
 			standing += MA
 
 	update_tail_showing()
+	update_wing_layer()
 	overlays_standing[BODY_LAYER] = standing
 	apply_standing_overlay(BODY_LAYER)
 
@@ -376,15 +376,18 @@ Please contact me on #coderbus IRC. ~Carn x
 		return
 	update_hair()
 	update_mutations()
+	apply_recolor()
 	update_body()
 	update_inv_w_uniform()
 	update_inv_wear_id()
 	update_inv_gloves()
 	update_inv_glasses()
-	update_inv_ears()
+	update_inv_r_ear()
+	update_inv_l_ear()
 	update_inv_shoes()
 	update_inv_s_store()
 	update_inv_wear_mask()
+	update_inv_neck()
 	update_inv_head()
 	update_inv_belt()
 	update_inv_back()
@@ -518,34 +521,37 @@ Please contact me on #coderbus IRC. ~Carn x
 	apply_standing_overlay(GLASSES_LAYER)
 
 
-/mob/living/carbon/human/update_inv_ears()
-	remove_standing_overlay(EARS_LAYER)
+/mob/living/carbon/human/update_inv_l_ear()
+	remove_standing_overlay(L_EAR_LAYER)
+	if(l_ear)
+		if(client && hud_used && hud_used.hud_shown)
+			if(hud_used.inventory_shown)			//if the inventory is open ...
+				l_ear.screen_loc = ui_l_ear			//...draw the item in the inventory screen
+			client.screen += l_ear					//Either way, add the item to the HUD
 
-	if(l_ear || r_ear)
-		if(l_ear)
-			if(client && hud_used && hud_used.hud_shown)
-				if(hud_used.inventory_shown)			//if the inventory is open ...
-					l_ear.screen_loc = ui_l_ear			//...draw the item in the inventory screen
-				client.screen += l_ear					//Either way, add the item to the HUD
+		var/image/standing = l_ear.get_standing_overlay(src, 'icons/mob/l_ear.dmi', SPRITE_SHEET_EARS, -L_EAR_LAYER)
+		standing = human_update_offset(standing, TRUE)
+		standing.pixel_x += species.offset_features[OFFSET_EARS][1]
+		standing.pixel_y += species.offset_features[OFFSET_EARS][2]
+		overlays_standing[L_EAR_LAYER] = standing
 
-			var/image/standing = l_ear.get_standing_overlay(src, 'icons/mob/ears.dmi', SPRITE_SHEET_EARS, -EARS_LAYER)
-			standing = human_update_offset(standing, TRUE)
-			standing.pixel_x += species.offset_features[OFFSET_EARS][1]
-			standing.pixel_y += species.offset_features[OFFSET_EARS][2]
-			overlays_standing[EARS_LAYER] = standing
-		if(r_ear)
-			if(client && hud_used && hud_used.hud_shown)
-				if(hud_used.inventory_shown)		//if the inventory is open ...
-					r_ear.screen_loc = ui_r_ear		//...draw the item in the inventory screen
-				client.screen += r_ear				//Either way, add the item to the HUD
+	apply_standing_overlay(L_EAR_LAYER)
 
-			var/image/standing = r_ear.get_standing_overlay(src, 'icons/mob/ears.dmi', SPRITE_SHEET_EARS, -EARS_LAYER)
-			standing = human_update_offset(standing, TRUE)
-			standing.pixel_x += species.offset_features[OFFSET_EARS][1]
-			standing.pixel_y += species.offset_features[OFFSET_EARS][2]
-			overlays_standing[EARS_LAYER] = standing
+/mob/living/carbon/human/update_inv_r_ear()
+	remove_standing_overlay(R_EAR_LAYER)
+	if(r_ear)
+		if(client && hud_used && hud_used.hud_shown)
+			if(hud_used.inventory_shown)		//if the inventory is open ...
+				r_ear.screen_loc = ui_r_ear		//...draw the item in the inventory screen
+			client.screen += r_ear				//Either way, add the item to the HUD
 
-	apply_standing_overlay(EARS_LAYER)
+		var/image/standing = r_ear.get_standing_overlay(src, 'icons/mob/r_ear.dmi', SPRITE_SHEET_EARS, -R_EAR_LAYER)
+		standing = human_update_offset(standing, TRUE)
+		standing.pixel_x += species.offset_features[OFFSET_EARS][1]
+		standing.pixel_y += species.offset_features[OFFSET_EARS][2]
+		overlays_standing[R_EAR_LAYER] = standing
+
+	apply_standing_overlay(R_EAR_LAYER)
 
 
 /mob/living/carbon/human/update_inv_shoes()
@@ -687,7 +693,7 @@ Please contact me on #coderbus IRC. ~Carn x
 
 	update_inv_w_uniform()
 	update_tail_showing()
-	update_collar()
+	update_inv_neck()
 
 	apply_standing_overlay(SUIT_LAYER)
 
@@ -720,6 +726,20 @@ Please contact me on #coderbus IRC. ~Carn x
 
 	apply_standing_overlay(FACEMASK_LAYER)
 
+/mob/living/carbon/human/update_inv_neck()
+	remove_standing_overlay(NECK_LAYER)
+	if(neck)
+		if(client && hud_used && hud_used.hud_shown)
+			if(hud_used.inventory_shown)
+				neck.screen_loc = ui_neck
+			client.screen += neck
+
+		var/image/standing = neck.get_standing_overlay(src, 'icons/mob/neck.dmi', SPRITE_SHEET_NECK, -NECK_LAYER)
+		standing = human_update_offset(standing, FALSE)
+		standing.pixel_x += species.offset_features[OFFSET_NECK][1]
+		standing.pixel_y += species.offset_features[OFFSET_NECK][2]
+		overlays_standing[NECK_LAYER] = standing
+	apply_standing_overlay(NECK_LAYER)
 
 /mob/living/carbon/human/update_inv_back()
 	remove_standing_overlay(BACK_LAYER)
@@ -811,6 +831,22 @@ Please contact me on #coderbus IRC. ~Carn x
 
 	apply_standing_overlay(L_HAND_LAYER)
 
+/mob/living/carbon/human/proc/update_wing_layer()
+	remove_standing_overlay(WING_UNDERLIMBS_LAYER)
+	remove_standing_overlay(WING_LAYER)
+	var/datum/sprite_accessory/wing/body_accessory = global.body_wing_accessory_by_name[wing_accessory_name]
+	if(!istype(body_accessory))
+		return
+
+	var/mutable_appearance/wings = mutable_appearance(body_accessory.icon, body_accessory.icon_state, layer = -WING_LAYER)
+	overlays_standing[WING_LAYER] = wings
+
+	var/mutable_appearance/under_wing = mutable_appearance(body_accessory.icon, "[body_accessory.icon_state]_BEHIND", layer = -WING_UNDERLIMBS_LAYER)
+	overlays_standing[WING_UNDERLIMBS_LAYER] = under_wing
+
+	apply_standing_overlay(WING_UNDERLIMBS_LAYER)
+	apply_standing_overlay(WING_LAYER)
+
 /mob/living/carbon/human/proc/update_tail_showing()
 	remove_standing_overlay(TAIL_LAYER)
 
@@ -843,25 +879,6 @@ Please contact me on #coderbus IRC. ~Carn x
 			overlays_standing[TAIL_LAYER] = standing
 
 	apply_standing_overlay(TAIL_LAYER)
-
-
-//Adds a collar overlay above the helmet layer if the suit has one
-//	Suit needs an identically named sprite in icons/mob/collar.dmi
-/mob/living/carbon/human/proc/update_collar()
-	remove_standing_overlay(COLLAR_LAYER)
-
-	if(wear_suit)
-		var/icon/C = new('icons/mob/collar.dmi')
-		if(wear_suit.icon_state in C.IconStates())
-
-			var/image/standing = image("icon" = C, "icon_state" = "[wear_suit.icon_state]", "layer"=-COLLAR_LAYER)
-			standing.color = wear_suit.color
-			standing = human_update_offset(standing, TRUE)
-			standing.pixel_x += species.offset_features[OFFSET_NECK][1]
-			standing.pixel_y += species.offset_features[OFFSET_NECK][2]
-			overlays_standing[COLLAR_LAYER]	= standing
-
-	apply_standing_overlay(COLLAR_LAYER)
 
 
 /mob/living/carbon/human/proc/update_surgery()
@@ -942,3 +959,5 @@ Please contact me on #coderbus IRC. ~Carn x
 		I.add_filter("Gnome_Cut_Torso", 1, displacement_map_filter(cut_torso_mask, x = 0, y = 0, size = 2))
 		I.add_filter("Gnome_Cut_Legs", 1, displacement_map_filter(cut_legs_mask, x = 0, y = 0, size = 3))
 	return I
+
+#undef BODY_ICON
