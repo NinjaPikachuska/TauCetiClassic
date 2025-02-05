@@ -42,7 +42,7 @@ export const PDA = (props, context) => {
 
   return (
     <Window width={600} height={650}>
-      <Window.Content scrollable>
+      <Window.Content>
         <Stack fill vertical>
           <Stack.Item>
             <PDAHeader />
