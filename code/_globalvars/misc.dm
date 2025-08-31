@@ -38,6 +38,7 @@ var/global/list/ignore_vision_inside = list(
 	/obj/machinery/clonepod,
 	/obj/machinery/dna_scannernew,
 	/obj/machinery/sleeper,
+	/obj/machinery/build_crane,
 	/obj/effect/dummy,
 	/obj/structure/droppod,
 	/obj/item/organ/external/head/skeleton,
@@ -64,3 +65,5 @@ var/global/insurance_price_change_cd
 
 var/global/nuclear_siren_cooldown = 0
 
+var/global/station_disposal_count = 0
+var/global/station_chairs_count = 0

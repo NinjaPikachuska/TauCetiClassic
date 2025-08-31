@@ -285,6 +285,7 @@
 
 			dat += "</tr></table><br>Выбрано: [currTag ? currTag : "None"]</tt>"
 		if("Ценник")
+			icon_state = "labeler0"
 			if(autodescription)
 				dat += "Описание: [lot_description]"
 			else
@@ -298,6 +299,7 @@
 				dat += "Категория: <A href='byond://?src=\ref[src];category=1'>[lot_category]</A>"
 			dat += " <A href='byond://?src=\ref[src];autocateg=1'>авто</A><BR><BR>\n"
 		if("Бирка")
+			icon_state = "labeler1"
 			dat += "Текст бирки: <A href='byond://?src=\ref[src];label_text=1'>[label ? label : "Написать"]</A><BR>\n"
 
 	var/datum/browser/popup = new(user, "destTagScreen", "Маркировщик 2.3", 450, 400)
@@ -554,11 +556,11 @@
 
 	var/obj/structure/disposalholder/H = new(null, contents, new /datum/gas_mixture)
 
-	if(!trunk)
+	if(!checkTrunk())
 		expel(H)
-		return
+	else
+		H.start(trunk) // start the holder processing movement
 
-	H.start(trunk) // start the holder processing movement
 	flushing = 0
 	// now reset disposal state
 	flush = 0
