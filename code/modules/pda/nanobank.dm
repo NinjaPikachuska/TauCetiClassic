@@ -51,7 +51,7 @@
 
 	data["available_accounts"] = get_available_account_data()
 
-	var/list/subordinate_staff = my_subordinate_staff(pda.ownrank)
+	var/list/subordinate_staff = SSeconomy.my_subordinate_staff(pda.ownrank)
 	data["subordinate_staff"] = subordinate_staff
 
 	data["selected_account"] = list()
@@ -72,7 +72,7 @@
 		data["money"] = user_account.money
 		data["salary"] = user_account.owner_salary
 
-		data["is_head"] = (pda.ownrank in global.heads_positions)
+		data["is_head"] = (pda.ownrank in SSjob.heads_positions)
 
 		data["insurances"] = list()
 		data["changable_insurances"] = list()
@@ -183,7 +183,7 @@
 			var/target = params["account"]
 			var/datum/money_account/MA
 
-			for(var/person in my_subordinate_staff(pda.ownrank))
+			for(var/person in SSeconomy.my_subordinate_staff(pda.ownrank))
 				if(person["account"] == target)
 					MA = get_account(target)
 
